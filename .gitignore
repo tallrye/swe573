@@ -1,0 +1,30 @@
+HELP.md
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+**/.idea
+**/*.iws
+**/*.iml
+**/*.ipr
+
+### VS Code ###
+**/.vscode/
+
+# dependencies
+**/wlearn-react/node_modules
+**/wlearn-react/.pnp
+**/wlearn-react.pnp.js
+
+# testing
+**/wlearn-react/coverage
+
+# production
+**/wlearn-react/build
+
+# misc
+**/.DS_Store
+
+**/wlearn-react/npm-debug.log*
+**/wlearn-react/yarn-debug.log*
+**/wlearn-react/yarn-error.log*
