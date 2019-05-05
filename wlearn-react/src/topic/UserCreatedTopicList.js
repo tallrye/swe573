@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ACCESS_TOKEN, API_BASE_URL, TOPIC_LIST_SIZE } from "../constants";
 import axios from "axios";
-import { Badge, Button, Table } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 class UserCreatedTopicList extends Component {
@@ -9,12 +9,8 @@ class UserCreatedTopicList extends Component {
         super(props);
         this.state = {
             topics: [],
-            page: 0,
-            size: 10,
-            totalElements: 0,
-            totalPages: 0,
-            last: true,
-            isLoading: false
+            isLoading: false,
+            input: ''
         };
         this.loadUserCreatedTopics = this.loadUserCreatedTopics.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -27,12 +23,7 @@ class UserCreatedTopicList extends Component {
 
         axios.get(url).then(res => {
             this.setState({
-                topics: res.data.content,
-                page: res.data.page,
-                size: res.data.size,
-                totalElements: res.data.totalElements,
-                totalPages: res.data.totalPages,
-                last: res.data.last,
+                topics: res.data,
                 isLoading: false
             })
         }).catch(err => {
@@ -86,10 +77,11 @@ class UserCreatedTopicList extends Component {
                     </div>
                 </div>
                 <div className="container">
-                    {
-                        topics.map((topic, topicIndex) => {
-                            return (
-                                <div className="row mt-5">
+                    <div className="row mt-5">
+                        {
+                            topics.map((topic, topicIndex) => {
+                                return (
+
                                     <div className="col-md-4" key={topicIndex}>
                                         <div className="card" style={{ padding: '20px' }}>
                                             <div className="card-bod">
@@ -104,11 +96,11 @@ class UserCreatedTopicList extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })
-                    }
 
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </React.Fragment>
 

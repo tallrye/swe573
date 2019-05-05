@@ -12,11 +12,6 @@ class Glossary extends Component {
         super(props);
         this.state = {
             topics: [],
-            page: 0,
-            size: 10,
-            totalElements: 0,
-            totalPages: 0,
-            last: true,
             isLoading: false,
             input: ''
         };
@@ -25,15 +20,10 @@ class Glossary extends Component {
     }
 
     loadTopicList(page, size = TOPIC_LIST_SIZE) {
-        let url = API_BASE_URL + "/topics?page=" + page + "&size=" + size;
+        let url = API_BASE_URL + "/topics";
         axios.get(url).then(res => {
             this.setState({
-                topics: res.data.content,
-                page: res.data.page,
-                size: res.data.size,
-                totalElements: res.data.totalElements,
-                totalPages: res.data.totalPages,
-                last: res.data.last,
+                topics: res.data,
                 isLoading: false
             })
         }).catch(err => {
@@ -70,7 +60,7 @@ class Glossary extends Component {
                         <div className="row no-gutters ">
                             <div className="col-md-4">
                                 <div className="clear p-4">
-                                    <img src={"https://via.placeholder.com/300x200"} className="img-fluid fullWidth" alt={topic.title} />
+                                    <img src={topic.imageUrl} className="img-fluid fullWidth" alt={topic.title} />
                                     <br />
 
                                     <br />

@@ -52,10 +52,10 @@ const AddContent = (props) => (
 
                                     createContent(newContent, topicId)
                                         .then(res => {
-                                            toast.notify("Content created successfully.", { position: "bottom-right" });
+                                            toast.notify("Content created successfully.", { position: "top-right" });
                                             props.history.push(`/topic/${topicId}`);
                                         }).catch(err => {
-                                            toast.notify("Topic does not exist!", { position: "bottom-right" });
+                                            toast.notify("Topic does not exist!", { position: "top-right" });
                                         });
 
                                     setSubmitting(false);

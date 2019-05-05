@@ -161,3 +161,33 @@ code {
 .RichEditor-activeButton {
     color: #5890ff;
 }
+
+.materialText img{
+    max-width: 100%;
+    height: auto;
+}
+
+.materialBody{
+    min-height: 300px;
+    padding: 20px;
+    border: 1px solid #cdcdcd; 
+    margin-bottom: 100px;
+}
+
+.fontMedium{
+    font-size: 20px;
+}
+
+.Toaster__alert{
+    background: #28a745 !important;
+    color: white !important;
+    border-radius: 0 !important;
+}
+
+.Toaster__alert_text{
+    color: white !important;
+}
+
+.Toaster__manager-top-right{
+    top: 65px !important;
+}

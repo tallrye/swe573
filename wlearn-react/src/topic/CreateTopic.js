@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import toast from "toasted-notes";
 import wdk from "wikidata-sdk";
 import axios from "axios";
-import { Badge, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 class CreateTopic extends Component {
     constructor(props) {
@@ -16,6 +16,7 @@ class CreateTopic extends Component {
         this.state = {
             title: '',
             description: '',
+            imageUrl: '',
             wikiDataSearch: [],
             wikiData: []
         };
@@ -24,6 +25,7 @@ class CreateTopic extends Component {
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleKeywordChange = this.handleKeywordChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleImageUrlChange = this.handleImageUrlChange.bind(this);
     }
 
     handleSubmit(event) {
@@ -32,24 +34,23 @@ class CreateTopic extends Component {
         const newTopic = {
             title: this.state.title,
             description: this.state.description,
-            wikiData: this.state.wikiData
+            wikiData: this.state.wikiData,
+            imageUrl: this.state.imageUrl
         };
 
         createTopic(newTopic)
             .then(response => {
-                toast.notify("Topic created successfully.", { position: "bottom-right" });
+                toast.notify("Topic created successfully.", { position: "top-right" });
                 this.props.history.push(`/${this.props.currentUser.username}/topics/created`);
             }).catch(error => {
                 if (error.status === 401) {
                     this.props.handleLogout();
                 } else {
-                    toast.notify('Sorry! Something went wrong. Please try again!', { position: "bottom-right" });
+                    toast.notify('Sorry! Something went wrong. Please try again!', { position: "top-right" });
                 }
             });
 
     }
-
-
 
     handleTitleChange(event) {
         const value = event.target.value;
@@ -59,6 +60,11 @@ class CreateTopic extends Component {
     handleDescriptionChange(event) {
         const value = event.target.value;
         this.setState({ description: value })
+    }
+
+    handleImageUrlChange(event) {
+        const value = event.target.value;
+        this.setState({ imageUrl: value })
     }
 
     handleKeywordChange(event) {
@@ -72,9 +78,9 @@ class CreateTopic extends Component {
                     .then(response => {
                         if (response.data.search.length > 0) {
                             this.setState({ wikiDataSearch: response.data.search })
-                            toast.notify("Found in WikiData!", { position: "bottom-right" })
+                            toast.notify("Found in WikiData!", { position: "top-right" })
                         } else {
-                            toast.notify("Keyword can not found!", { position: "bottom-right" });
+                            toast.notify("Keyword can not found!", { position: "top-right" });
                         }
                     })
             }, 1000)
@@ -95,7 +101,7 @@ class CreateTopic extends Component {
         const wikidataResultList = wikidatas.map((wiki, wikiIndex) => {
             return (
                 // if the description is empty, empty row seen, try domates
-                <Row key={wikiIndex} className="border border-info p-1 m-1 text-left">
+                <Row key={wikiIndex} className="border-bottom border-info p-1 m-1 text-left">
                     {wiki.description && (
                         <React.Fragment>
                             <Col md="1"><Form.Check onChange={this.handleSelect}
@@ -103,8 +109,8 @@ class CreateTopic extends Component {
                                 id="default-checkbox"
                                 value={wiki.concepturi}
                             /></Col>
-                            <Col md="9"><Badge variant="secondary">Description: </Badge> {wiki.description}</Col>
-                            <Col md="2"><Badge variant="secondary">Url: </Badge> <a href={wiki.concepturi} target="_blank" rel="noopener noreferrer">WikiData Page</a></Col>
+                            <Col md="9">{wiki.description}</Col>
+                            <Col md="2"><a href={wiki.concepturi} target="_blank" rel="noopener noreferrer">Visit</a></Col>
                         </React.Fragment>
                     )}
                 </Row>
@@ -142,6 +148,19 @@ class CreateTopic extends Component {
                                                 type="text"
                                                 placeholder="Topic Title"
                                                 onChange={this.handleTitleChange}
+                                            />
+                                        </Col>
+                                    </Form.Group>
+
+                                    <Form.Group className="row" controlId="formPlaintextUsernameOrEmail">
+                                        <Form.Label column sm="12">
+                                            Main Image Url
+                                        </Form.Label>
+                                        <Col sm="12">
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter Image URL"
+                                                onChange={this.handleImageUrlChange}
                                             />
                                         </Col>
                                     </Form.Group>
