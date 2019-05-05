@@ -87,11 +87,15 @@ class UserCreatedTopicList extends Component {
                                             <div className="card-bod">
                                                 <h4>{topic.title}</h4>
                                                 <p>{topic.description}</p>
-                                                <p>{topic.wikiData.map((wiki, idx) => {
-                                                    return <a key={idx} href={wiki} target="_blank" rel="noopener noreferrer" className="badge badge-pill badge-primary">{wiki.substring(wiki.indexOf("Q"), wiki.length)}</a>
-                                                })}</p>
+                                                <p>{topic.wikiData && (
+                                                    topic.wikiData.map((wiki, idx) => {
+                                                        return <a key={idx} href={wiki} target="_blank" rel="noopener noreferrer" className="badge badge-pill badge-primary">{wiki.substring(wiki.indexOf("Q"), wiki.length)}</a>
+                                                    })
+                                                )
+                                                }</p>
                                                 <hr />
                                                 <Link className="btn btn-sm btn-outline-primary" to={`/topic/${topic.id}`}>Details</Link>
+                                                <Link className="btn btn-sm btn-outline-primary ml-2" to={`/topic/${topic.id}/edit`}>Edit</Link>
                                                 <Button className="ml-2 btn-sm" variant="outline-danger" onClick={() => this.handleDeleteTopicById(topic.id)}>Delete</Button>
                                             </div>
                                         </div>

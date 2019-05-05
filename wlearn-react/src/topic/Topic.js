@@ -320,6 +320,7 @@ class Topic extends Component {
                         <div className="row">
                             <div className="col-md-8">
                                 <h4 className="mb-4">Explore <strong>{topic.title}</strong></h4>
+                                <Link className="btn btn-sm btn-outline-primary ml-2" to={`/topic/${topic.id}/edit`}>Edit</Link>
                                 <p>
                                     {topic.description}
                                 </p>
