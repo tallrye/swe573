@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
-import './App.css';
 import { Route, withRouter, Switch } from 'react-router-dom';
-import { getCurrentUser } from '../util/APIUtils';
-import { ACCESS_TOKEN } from '../constants';
+import { getCurrentUser } from './util/APIUtils';
+import { ACCESS_TOKEN } from './constants';
 
-import Glossary from '../glossary/Glossary';
-import CreateTopic from '../topic/CreateTopic';
-import Login from '../user/Login';
-import Signup from '../user/Signup';
-import Home from '../common/Home';
-import AppHeader from '../common/AppHeader';
-import Footer from '../common/Footer';
-import NotFound from '../common/NotFound';
-import PrivateRoute from '../common/PrivateRoute';
+import Glossary from './glossary/Glossary';
+import CreateTopic from './topic/CreateTopic';
+import Login from './user/Login';
+import Signup from './user/Signup';
+import Home from './common/Home';
+import AppHeader from './common/AppHeader';
+import Footer from './common/Footer';
+import NotFound from './common/NotFound';
+import PrivateRoute from './common/PrivateRoute';
 import toast from 'toasted-notes'
 import 'toasted-notes/src/styles.css';
-import UserCreatedTopicList from "../topic/UserCreatedTopicList";
-import UserEnrolledTopicList from "../topic/UserEnrolledTopicList";
-import UserProfile from "../user/UserProfile";
-import Topic from "../topic/Topic";
-import EditTopic from "../topic/EditTopic";
-import AddContent from "../learningpath/AddContent";
-import EditContent from "../learningpath/EditContent";
+import UserCreatedTopicList from "./topic/UserCreatedTopicList";
+import UserEnrolledTopicList from "./topic/UserEnrolledTopicList";
+import UserProfile from "./user/UserProfile";
+import Topic from "./topic/Topic";
+import TopicPreview from "./topic/TopicPreview"
+import EditTopic from "./topic/EditTopic";
+import AddContent from "./learningpath/AddContent";
+import EditContent from "./learningpath/EditContent";
 
 class App extends Component {
     constructor(props) {
@@ -75,12 +75,12 @@ class App extends Component {
     handleLogin() {
         toast.notify("You're successfully logged in.", { position: "top-right" });
         this.loadCurrentUser();
-        this.props.history.push("/glossary");
+        this.props.history.push("/explore");
     }
 
     render() {
         if (this.state.isLoading) {
-            return <h1>isLoading!...</h1>
+            return <h4 className="text-center mt-5">Please wait...</h4>
         } else {
             return (
                 <div className="App">
@@ -94,7 +94,7 @@ class App extends Component {
 
                             <Route exact path="/" component={Home}></Route>
 
-                            <Route path="/glossary" component={Glossary}></Route>
+                            <Route path="/explore" component={Glossary}></Route>
 
                             <Route path="/login"
                                 render={(props) => <Login
@@ -131,6 +131,7 @@ class App extends Component {
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
                                 path="/topic/new"
+                                exact={true}
                                 currentUser={this.state.currentUser}
                                 component={CreateTopic}
                             ></PrivateRoute>
@@ -138,6 +139,7 @@ class App extends Component {
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
                                 path="/topic/:topicId/edit"
+                                exact={true}
                                 currentUser={this.state.currentUser}
                                 component={EditTopic}
                             ></PrivateRoute>
@@ -145,20 +147,43 @@ class App extends Component {
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
                                 path="/topic/:topicId/content"
+                                exact={true}
                                 component={AddContent}
                             ></PrivateRoute>
 
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
                                 path="/content/:contentId"
+                                exact={true}
                                 component={EditContent}
                             ></PrivateRoute>
 
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
+                                currentUser={this.state.currentUser}
                                 path="/topic/:topicId"
+                                exact={true}
                                 component={Topic}
+                                editable={true}
                             ></PrivateRoute>
+
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated}
+                                path="/topic/view/:topicId"
+                                exact={true}
+                                currentUser={this.state.currentUser}
+                                component={Topic}
+                                editable={false}
+                            ></PrivateRoute>
+
+                            <PrivateRoute
+                                path="/topic/preview/:topicId"
+                                exact={true}
+                                authenticated={this.state.isAuthenticated}
+                                currentUser={this.state.currentUser}
+                                component={TopicPreview}
+                            >
+                            </PrivateRoute>
 
                             <Route component={NotFound}></Route>
 

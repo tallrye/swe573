@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Row, InputGroup } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHashtag } from '@fortawesome/free-solid-svg-icons'
-import { API_BASE_URL, TOPIC_LIST_SIZE } from '../constants';
-import './Glossary.css';
+import { Row, InputGroup } from 'react-bootstrap';
+import { Link, withRouter } from 'react-router-dom';
+import { API_BASE_URL } from '../constants';
+import PageHeader from "../components/PageHeader";
+import { WikiLabels } from "../components/Wiki";
 import axios from 'axios';
 
 class Glossary extends Component {
@@ -12,101 +11,80 @@ class Glossary extends Component {
         super(props);
         this.state = {
             topics: [],
-            isLoading: false,
             input: ''
         };
         this.loadTopicList = this.loadTopicList.bind(this);
-        this.handleLoadMore = this.handleLoadMore.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
-    loadTopicList(page, size = TOPIC_LIST_SIZE) {
+    loadTopicList() {
         let url = API_BASE_URL + "/topics";
+
         axios.get(url).then(res => {
             this.setState({
-                topics: res.data,
-                isLoading: false
+                topics: res.data
             })
         }).catch(err => {
-            this.setState({ isLoading: false })
+            console.log(err)
         });
     }
 
-    onChangeHandler(e) {
+    handleSearch(e) {
         this.setState({
             input: e.target.value,
         })
     }
 
     componentDidMount() {
-        this.loadTopicList(this.state.page, this.state.size);
-    }
-
-
-    handleLoadMore() {
-        console.log("more topics loaded!..");
-        this.loadTopicList(this.state.page + 1);
+        this.loadTopicList();
     }
 
 
     render() {
-        if (this.state.isLoading) {
-            return <h1>isLoading!...</h1>
-        }
         const topics = this.state.topics;
-        const topicsView = topics.filter(topic => this.state.input === '' || topic.title.toLowerCase().indexOf(this.state.input) > -1).map((topic, topicIndex) => {
-            return (
-                <Row className="mb-1" key={topicIndex}>
-                    <div className="card mb-4" style={{ minWidth: "100%" }}>
-                        <div className="row no-gutters ">
-                            <div className="col-md-4">
-                                <div className="clear p-4">
-                                    <img src={topic.imageUrl} className="img-fluid fullWidth" alt={topic.title} />
-                                    <br />
-
-                                    <br />
-                                    <Button variant="primary" block>Details</Button>
-                                </div>
-                            </div>
-                            <div className="col-md-8">
-                                <div className="card-body text-left">
-                                    <h5 className="card-title text-info text-justify mb-1">{topic.title} </h5>
-                                    <small className="text-left"><strong>by</strong> @{topic.createdBy.username} {' '}</small>
-                                    <hr />
-                                    <p className="card-text text-justify">{topic.description}</p>
-                                    <p className="card-text text-justify"><FontAwesomeIcon icon={faHashtag} /> wiki:
-                                        {topic.wikiData.map((wiki, idx) => {
-                                        return <a key={idx} href={wiki} target="_blank" rel="noopener noreferrer" className="ml-2 badge badge-pill badge-primary">{wiki.substring(wiki.indexOf("Q"), wiki.length)}</a>
-                                    })}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Row>
-            )
-        })
 
         return (
             <React.Fragment>
-                <div className="pageHeader text-left">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-12">
-                                Explore
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                <PageHeader title="Explore" />
+
                 <div className="container">
                     <div className="row  mt-5 mb-5">
                         <div className="col-md-12">
                             <InputGroup>
-                                <input value={this.state.input} placeholder="Search topics" className="form-control searchInput" type="text" onChange={this.onChangeHandler.bind(this)} />
+                                <input value={this.state.input} placeholder="Search topics" className="form-control searchInput" type="text" onChange={this.handleSearch} />
                             </InputGroup>
                         </div>
                     </div>
                     <div className="col-md-12">
-                        {topicsView}
+                        {topics.filter(topic => this.state.input === '' || topic.title.toLowerCase().indexOf(this.state.input) > -1).map((topic, topicIndex) => {
+                            return (
+                                <Row className="mb-1" key={topicIndex}>
+                                    <div className="card mb-4" style={{ minWidth: "100%" }}>
+                                        <div className="row no-gutters ">
+                                            <div className="col-md-4">
+                                                <div className="clear p-4">
+                                                    <img src={topic.imageUrl} className="img-fluid fullWidth mb-4" alt={topic.title} />
+                                                    <Link className="btn btn-sm btn-primary fullWidth" to={`/topic/preview/${topic.id}`}>Details</Link>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-8">
+                                                <div className="card-body text-left">
+                                                    <h5 className="card-title text-info text-justify mb-1">{topic.title} </h5>
+                                                    <small className="text-left"><strong>by </strong> @{topic.createdBy} {' '}</small>
+                                                    <hr />
+                                                    <p className="card-text text-justify">{topic.description}</p>
+                                                    <WikiLabels
+                                                        wikis={topic.wikiData}
+                                                    />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Row>
+                            )
+                        })}
                     </div>
                 </div>
             </React.Fragment>

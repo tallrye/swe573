@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import { ACCESS_TOKEN, API_BASE_URL } from "../constants";
+import { API_BASE_URL, REQUEST_HEADERS } from "../constants";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import { createTopic } from '../util/APIUtils';
 import { withRouter } from 'react-router-dom';
 import toast from "toasted-notes";
 import wdk from "wikidata-sdk";
 import axios from "axios";
-import { Row } from "react-bootstrap";
-import EditorField from '../components/EditorField'
+import { Col, Button, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
 
-class CreateTopic extends Component {
+class EditTopic extends Component {
     constructor(props) {
         super(props);
         this.timer = null;
@@ -23,29 +22,10 @@ class CreateTopic extends Component {
             wikiData: [],
             topic: false
         };
-        this.handleTitleChange = this.handleTitleChange.bind(this);
-        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleKeywordChange = this.handleKeywordChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-        this.handleImageUrlChange = this.handleImageUrlChange.bind(this);
     }
 
-
-
-    handleTitleChange(event) {
-        const value = event.target.value;
-        this.setState({ title: value })
-    }
-
-    handleDescriptionChange(event) {
-        const value = event.target.value;
-        this.setState({ description: value })
-    }
-
-    handleImageUrlChange(event) {
-        const value = event.target.value;
-        this.setState({ imageUrl: value })
-    }
 
     handleKeywordChange(event) {
         clearTimeout(this.timer);
@@ -79,13 +59,7 @@ class CreateTopic extends Component {
     loadTopicById() {
         let url = API_BASE_URL + `/topics/topic/${this.props.match.params.topicId}`;
 
-        const options = {
-            method: 'GET',
-            headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem(ACCESS_TOKEN) },
-            url
-        };
-
-        axios(options)
+        axios.get(url, REQUEST_HEADERS)
             .then(res => {
                 this.setState({ topic: res.data })
 
@@ -102,7 +76,7 @@ class CreateTopic extends Component {
         const vm = this.state;
         const props = this.props;
         const wikidatas = this.state.wikiDataSearch;
-        const wikidataResultList = wikidatas.map((wiki, wikiIndex) => {
+        wikidatas.map((wiki, wikiIndex) => {
             return (
                 // if the description is empty, empty row seen, try domates
                 <Row key={wikiIndex} className="border-bottom border-info p-1 m-1 text-left">
@@ -125,15 +99,12 @@ class CreateTopic extends Component {
 
             vm.topic && (
                 <React.Fragment>
-                    <div className="pageHeader text-left">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-12">
-                                    Create a topic
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <PageHeader title="Edit Topic">
+                        <Link to={`/${this.props.currentUser.username}/topics/created`} className="breadcrumbLink">
+                            <span>My Topics</span>
+                        </Link>
+                    </PageHeader>
+
                     <div className="sectionPadding">
                         <div className="container w-90 text-left">
                             <div className="row">
@@ -169,7 +140,7 @@ class CreateTopic extends Component {
                                                     description: values.description,
                                                 };
 
-                                                createTopic(newTopic, topicId)
+                                                createTopic(newTopic)
                                                     .then(res => {
                                                         toast.notify("Content updated successfully.", { position: "top-right" });
                                                         props.history.push(`/topic/${topicId}`);
@@ -222,4 +193,4 @@ class CreateTopic extends Component {
     }
 }
 
-export default withRouter(CreateTopic);
+export default withRouter(EditTopic);

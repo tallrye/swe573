@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import { createTopic } from '../util/APIUtils';
 import { withRouter } from 'react-router-dom';
 import toast from "toasted-notes";
 import wdk from "wikidata-sdk";
 import axios from "axios";
-import { Row } from "react-bootstrap";
+import { Row, Form, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
 
 class CreateTopic extends Component {
     constructor(props) {
@@ -18,14 +17,15 @@ class CreateTopic extends Component {
             description: '',
             imageUrl: '',
             wikiDataSearch: [],
-            wikiData: []
+            selectedWikis: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleKeywordChange = this.handleKeywordChange.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
         this.handleImageUrlChange = this.handleImageUrlChange.bind(this);
+        this.addWiki = this.addWiki.bind(this);
+        this.removeWiki = this.removeWiki.bind(this);
     }
 
     handleSubmit(event) {
@@ -34,7 +34,7 @@ class CreateTopic extends Component {
         const newTopic = {
             title: this.state.title,
             description: this.state.description,
-            wikiData: this.state.wikiData,
+            wikiData: this.state.selectedWikis,
             imageUrl: this.state.imageUrl
         };
 
@@ -73,7 +73,7 @@ class CreateTopic extends Component {
         const value = event.target.value;
         if (value !== '') {
             this.timer = setTimeout(() => {
-                const url = wdk.searchEntities(value, 'en', 5, 'json');
+                const url = wdk.searchEntities(value, 'en', 15, 'json');
                 axios.get(url)
                     .then(response => {
                         if (response.data.search.length > 0) {
@@ -89,57 +89,57 @@ class CreateTopic extends Component {
         }
     }
 
-    handleSelect(event) {
-        const wikiData = this.state.wikiData.slice();
+    addWiki(wiki) {
+        const newWiki = {
+            conceptUri: wiki.concepturi,
+            description: wiki.description,
+            id: wiki.id,
+            label: wiki.label
+        }
+
+        const { selectedWikis } = this.state;
+
         this.setState({
-            wikiData: wikiData.concat(event.target.value)
+            selectedWikis: selectedWikis.concat(newWiki)
         });
     }
 
-    render() {
-        const wikidatas = this.state.wikiDataSearch;
-        const wikidataResultList = wikidatas.map((wiki, wikiIndex) => {
-            return (
-                // if the description is empty, empty row seen, try domates
-                <Row key={wikiIndex} className="border-bottom border-info p-1 m-1 text-left">
-                    {wiki.description && (
-                        <React.Fragment>
-                            <Col md="1"><Form.Check onChange={this.handleSelect}
-                                type="checkbox"
-                                id="default-checkbox"
-                                value={wiki.concepturi}
-                            /></Col>
-                            <Col md="9">{wiki.description}</Col>
-                            <Col md="2"><a href={wiki.concepturi} target="_blank" rel="noopener noreferrer">Visit</a></Col>
-                        </React.Fragment>
-                    )}
-                </Row>
-            )
+    removeWiki(wikiId) {
+        const { selectedWikis } = this.state;
+
+        let filteredWikis = selectedWikis.filter(
+            obj => obj.id !== wikiId
+        )
+
+        this.setState({
+            selectedWikis: filteredWikis
         });
+
+    }
+
+    render() {
+        const { wikiDataSearch, selectedWikis } = this.state;
 
         return (
             <React.Fragment>
-                <div className="pageHeader text-left">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-12">
-                                Create a topic
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <PageHeader title="Create a Topic">
+                    <Link to={`/${this.props.currentUser.username}/topics/created`} className="breadcrumbLink">
+                        <span>My Topics</span>
+                    </Link>
+                </PageHeader>
+
                 <div className="sectionPadding">
-                    <div className="container w-90 text-left">
+                    <div className="container w-90">
                         <div className="row">
                             <div className="col-md-3">
                                 <h4 style={{ fontSize: '20px' }}>Things to <strong>Consider</strong></h4>
                                 <hr />
                                 <p style={{ fontSize: '14px', textAlign: 'justify' }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque ipsam ut consectetur vel excepturi alias laboriosam totam
-                        fuga reprehenderit officiis, sed aliquam accusamus repellat laborum! Fuga cupiditate porro exercitationem quod.</p>
+                                    fuga reprehenderit officiis, sed aliquam accusamus repellat laborum! Fuga cupiditate porro exercitationem quod.</p>
                             </div>
                             <div className="col-md-8 offset-md-1">
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Group className="row" controlId="formPlaintextUsernameOrEmail">
+                                    <Form.Group className="row" >
                                         <Form.Label column sm="12">
                                             Title
                                         </Form.Label>
@@ -152,7 +152,7 @@ class CreateTopic extends Component {
                                         </Col>
                                     </Form.Group>
 
-                                    <Form.Group className="row" controlId="formPlaintextUsernameOrEmail">
+                                    <Form.Group className="row" >
                                         <Form.Label column sm="12">
                                             Main Image Url
                                         </Form.Label>
@@ -165,7 +165,7 @@ class CreateTopic extends Component {
                                         </Col>
                                     </Form.Group>
 
-                                    <Form.Group className="row" controlId="formPlaintextPassword" >
+                                    <Form.Group className="row" >
                                         <Form.Label column sm="12">
                                             Description
                                         </Form.Label>
@@ -179,7 +179,24 @@ class CreateTopic extends Component {
                                         </Col>
                                     </Form.Group>
 
-                                    <Form.Group className="row" controlId="formPlaintextPassword" >
+                                    {selectedWikis.length > 0 && (
+                                        <div>
+                                            Added Wiki:
+                                            <ul>
+                                                {selectedWikis.map((wiki, idx) => {
+                                                    return (
+                                                        <li key={idx}>
+                                                            {wiki.label} - {wiki.description} <span onClick={() => this.removeWiki(wiki.id)} className="ml-2 removeWikiLabel badge badge-pill badge-danger">Remove</span>
+                                                        </li>
+                                                    )
+                                                })}
+
+                                            </ul>
+                                        </div>
+                                    )}
+
+
+                                    <Form.Group className="row"  >
                                         <Form.Label column sm="12">
                                             Keyword
                                         </Form.Label>
@@ -192,7 +209,30 @@ class CreateTopic extends Component {
                                         </Col>
                                     </Form.Group>
 
-                                    {wikidataResultList}
+                                    {wikiDataSearch.length > 0 && (
+                                        wikiDataSearch.map((wiki, wikiIndex) => {
+                                            return (
+                                                <Row key={wikiIndex} className="border-bottom border-info p-1 m-1">
+                                                    {wiki.description && (
+                                                        <React.Fragment>
+                                                            <Col md="1">
+                                                                <Form.Check
+                                                                    onChange={() => this.addWiki(wiki)}
+                                                                    type="checkbox"
+                                                                    id="default-checkbox"
+                                                                    value={wiki}
+                                                                />
+                                                            </Col>
+                                                            <Col md="9">{wiki.description}</Col>
+                                                            <Col md="2">
+                                                                <a href={wiki.concepturi} target="_blank" rel="noopener noreferrer">Visit</a>
+                                                            </Col>
+                                                        </React.Fragment>
+                                                    )}
+                                                </Row>
+                                            )
+                                        })
+                                    )}
 
                                     <Button className="mt-4" variant="success" type="submit" block>
                                         Create Topic

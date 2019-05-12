@@ -3,7 +3,7 @@ import image_1 from '../img/improve1.jpg'
 import image_2 from '../img/improve2.jpg'
 import { Link } from "react-router-dom";
 
-class Home extends Component {
+export default class Home extends Component {
 
     render() {
         return (
@@ -16,7 +16,7 @@ class Home extends Component {
                                 <p>
                                     W-Learn is a free-to-use knowledge sharing platform. Find your path and start learning.
                                 <br /><br />
-                                    <Link className="btn btn-outline-primary btn-xl" to="/glossary">Get Started</Link>
+                                    <Link className="btn btn-outline-primary btn-xl" to="/explore">Get Started</Link>
 
                                 </p>
                             </div>
@@ -39,17 +39,14 @@ class Home extends Component {
                                 <p>
                                     Learn from others, explore new world. And vice versa; tell what's on your mind, help others to polish their knowledge.
                                     <br /><br />
-                                    <Link className="btn btn-outline-primary btn-xl" to="/glossary">Get Started</Link>
+                                    <Link className="btn btn-outline-primary btn-xl" to="/explore">Get Started</Link>
                                 </p>
                             </div>
                         </div>
                     </div>
 
                 </div>
-
             </React.Fragment>
         )
     }
 }
-
-export default Home;
