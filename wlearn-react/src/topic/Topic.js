@@ -30,6 +30,7 @@ class Topic extends Component {
                     topic: res.data,
                     activeTab: res.data.contentList.length > 0 ? res.data.contentList[0].id : ''
                 })
+                console.log(res.data)
             }).catch(err => {
                 console.log(err)
             });

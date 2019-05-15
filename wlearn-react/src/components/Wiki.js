@@ -7,8 +7,8 @@ export class WikiLabel extends Component {
     render() {
         const { wiki } = this.props;
         return (
-            <a href={wiki} target="_blank" rel="noopener noreferrer" className="badge badge-pill badge-primary">
-                <FontAwesomeIcon icon={faHashtag} /> {wiki.substring(wiki.indexOf("Q"), wiki.length)}
+            <a href={wiki.conceptUri} target="_blank" rel="noopener noreferrer" className="badge badge-pill badge-primary mr-2">
+                <FontAwesomeIcon icon={faHashtag} /> {wiki.label}
             </a>
         )
 

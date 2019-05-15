@@ -74,7 +74,7 @@ export class PathElement extends Component {
     render() {
         const { content, questions, editable, handleRefresh } = this.props
         return (
-            <div className=" bg-alt materialBody">
+            <div className="bg-alt materialBody">
                 <h4 className="mb-4 fontMedium">
                     {content.title}
                     {editable && (
@@ -87,25 +87,35 @@ export class PathElement extends Component {
                 </h4>
                 <div className="text-left" dangerouslySetInnerHTML={{ __html: content.text }} ></div>
                 {
-                    questions.length > 0 && (
-                        <React.Fragment>
-                            <hr />
-                            {
-                                questions.map((question, idx) => {
-                                    return (
-                                        <Question
-                                            key={idx}
-                                            order={idx + 1}
-                                            question={question}
-                                            editable={editable}
-                                            handleRefresh={handleRefresh}
-                                            answered={false}
-                                        />
-                                    )
-                                })
-                            }
-                        </React.Fragment>
-                    )
+                    editable ? (
+                        questions.length > 0 && (
+                            <React.Fragment>
+                                <hr />
+                                {
+                                    questions.map((question, idx) => {
+                                        return (
+                                            <Question
+                                                key={idx}
+                                                order={idx + 1}
+                                                question={question}
+                                                editable={editable}
+                                                handleRefresh={handleRefresh}
+                                                answered={false}
+                                            />
+                                        )
+                                    })
+                                }
+                            </React.Fragment>
+                        )
+                    ) :
+                        (
+                            <div className="text-right">
+                                <hr />
+                                <Link className="btn btn-success btn-sm ml-2 inlineBtn" to={`/content/${content.id}/quiz`}><FontAwesomeIcon icon={faChevronRight} /> Start Section Quiz</Link>
+
+                            </div>
+                        )
+
                 }
             </div>
         )
@@ -225,7 +235,7 @@ export class Question extends Component {
                                                     type="submit"
                                                     disabled={disabled}
                                                     id={`question${question.id}`} >
-                                                    {disabled ? 'Answered' : 'Give Answer'}
+                                                    {disabled ? 'Answered' : 'Answer'}
                                                 </Button>
                                             </div>
                                         )}
