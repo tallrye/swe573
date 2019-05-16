@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { createTopic } from '../util/APIUtils';
-import { withRouter } from 'react-router-dom';
 import toast from "toasted-notes";
 import wdk from "wikidata-sdk";
 import axios from "axios";
 import { Row, Form, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 
 class CreateTopic extends Component {
@@ -242,7 +241,6 @@ class CreateTopic extends Component {
                         </div>
                     </div>
                 </div>
-
             </React.Fragment>
         );
     }

@@ -36,6 +36,7 @@ function QuestionModal(FieldProps) {
                         onSubmit={(values, { setSubmitting }) => {
                             setTimeout(() => {
                                 const newQuestion = {
+                                    contentId: FieldProps.contentId,
                                     text: values.text
                                 };
                                 createQuestion(newQuestion, FieldProps.contentId)

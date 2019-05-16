@@ -46,6 +46,7 @@ const AddContent = (props) => (
 
                                     let topicId = props.match.params.topicId;
                                     const newContent = {
+                                        topicId: topicId,
                                         title: values.title,
                                         text: values.text
                                     };

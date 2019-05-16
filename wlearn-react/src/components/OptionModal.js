@@ -36,8 +36,9 @@ function OptionModal(FieldProps) {
                         onSubmit={(values, { setSubmitting }) => {
                             setTimeout(() => {
                                 const newOption = {
+                                    questionId: FieldProps.questionId,
                                     text: values.text,
-                                    isCorrect: values.isCorrect
+                                    correct: values.isCorrect
                                 };
                                 createOption(newOption, FieldProps.questionId)
                                     .then(res => {
