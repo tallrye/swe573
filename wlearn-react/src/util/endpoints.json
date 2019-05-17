@@ -14,7 +14,7 @@
     "deleteQuestionById": "/questions/[slug1]",
     "createQuestion": "/questions/",
     "createOption": "/choices/",
-    "giveAnswer": "/questions/answer",
+    "giveAnswer": "/questions/answer/",
     "login": "/auth/signin",
     "signup": "/auth/signup",
     "checkUsernameAvailability": "/user/checkUsernameAvailability?username=[slug1]",

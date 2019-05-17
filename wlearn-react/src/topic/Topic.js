@@ -27,7 +27,6 @@ class Topic extends Component {
 
     loadTopicById() {
         let url = resolveEndpoint('getTopicById', [{ "slug1": this.props.match.params.topicId }]);
-
         axios.get(url, REQUEST_HEADERS)
             .then(res => {
                 this.setState({
@@ -80,9 +79,8 @@ class Topic extends Component {
                                         <p>
                                             {topic.description}
                                         </p>
-                                        <WikiLabels
-                                            wikis={topic.wikiData}
-                                        />
+                                        <WikiLabels wikis={topic.wikiData} />
+
                                     </div>
                                     <div className="col-md-4">
                                         <img src={topic.imageUrl} className="img-fluid" alt={topic.title} />

@@ -3,7 +3,7 @@ import { REQUEST_HEADERS } from "../constants";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faCheck } from '@fortawesome/free-solid-svg-icons'
 import PageHeader from "../components/PageHeader";
 import { resolveEndpoint } from "../util/Helpers";
 import Loading from '../components/Loading';
@@ -13,7 +13,8 @@ class ViewContent extends Component {
         super(props);
         this.state = {
             content: false,
-            loading: true
+            loading: true,
+            refreshed: false
         };
         this.loadContentById = this.loadContentById.bind(this);
     }
@@ -24,7 +25,7 @@ class ViewContent extends Component {
 
         axios.get(url, REQUEST_HEADERS)
             .then(res => {
-                this.setState({ content: res.data, loading: false })
+                this.setState({ content: res.data, loading: false, refreshed: false })
             }).catch(err => {
                 console.log(err)
             });
@@ -35,17 +36,18 @@ class ViewContent extends Component {
     }
 
 
+
     render() {
 
-        const { content, loading } = this.state;
+        const { content, loading, refreshed } = this.state;
 
         return (
             <React.Fragment>
-                {loading ? <Loading /> : (
+                {(loading || refreshed) ? <Loading /> : (
                     <React.Fragment>
                         <PageHeader title="Content Quiz">
                             <Link to={`/topic/view/${content.topicId}`} className="breadcrumbLink">
-                                <span>!! TOPIC NAME !!</span>
+                                <span>{content.topicTitle}</span>
                             </Link>
                         </PageHeader>
 
@@ -59,8 +61,23 @@ class ViewContent extends Component {
                                                 <div className="text-left" dangerouslySetInnerHTML={{ __html: content.text }} ></div>
                                                 <div className="text-right mt-5">
                                                     <hr />
-                                                    <Link className="btn btn-success btn-sm ml-2 inlineBtn" to={`/content/${content.id}/quiz`}><FontAwesomeIcon icon={faChevronRight} /> Start Section Quiz</Link>
+                                                    {content.questionCount > 0 ? (
+                                                        <Link className="btn btn-success btn-sm ml-2 inlineBtn" to={`/content/${content.id}/quiz`} ><FontAwesomeIcon icon={faChevronRight} /> Start Section Quiz</Link>
+                                                    ) : (
+                                                            <React.Fragment>
+                                                                {content.nextContentId === 0 ? (
+                                                                    <div className="text-right mt-5">
+                                                                        <Link className="btn btn-success btn-sm ml-2 inlineBtn" to={`/topic/view/${content.topicId}`}><FontAwesomeIcon icon={faCheck} /> Finalize</Link>
+                                                                    </div>
+                                                                ) : (
+                                                                        <div className="text-right mt-5">
+                                                                            <a className="btn btn-success btn-sm ml-2 inlineBtn" href={`/content/view/${content.nextContentId}`} ><FontAwesomeIcon icon={faChevronRight} /> Start Next Content</a>
+                                                                        </div>
+                                                                    )}
+                                                            </React.Fragment>
 
+
+                                                        )}
                                                 </div>
                                             </div>
                                         </div>

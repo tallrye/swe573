@@ -10,6 +10,7 @@ import { Link, withRouter } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { resolveEndpoint } from "../util/Helpers";
 import Loading from '../components/Loading';
+import loadingGif from '../img/loading.gif'
 
 class EditTopic extends Component {
     constructor(props) {
@@ -23,7 +24,8 @@ class EditTopic extends Component {
             wikiDataSearch: [],
             selectedWikis: [],
             topic: false,
-            loading: true
+            loading: true,
+            loadingWiki: false
         };
         this.handleKeywordChange = this.handleKeywordChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -35,12 +37,15 @@ class EditTopic extends Component {
     handleKeywordChange(event) {
         clearTimeout(this.timer);
 
+        this.setState({ loadingWiki: true })
+
         const value = event.target.value;
         if (value !== '') {
             this.timer = setTimeout(() => {
                 const url = wdk.searchEntities(value, 'en', 15, 'json');
                 axios.get(url)
                     .then(response => {
+                        this.setState({ loadingWiki: false })
                         if (response.data.search.length > 0) {
                             this.setState({ wikiDataSearch: response.data.search })
                             toast.notify("Found in WikiData!", { position: "top-right" })
@@ -77,18 +82,33 @@ class EditTopic extends Component {
     }
 
     addWiki(wiki) {
-        const newWiki = {
-            conceptUri: wiki.concepturi,
-            description: wiki.description,
-            id: wiki.id,
-            label: wiki.label
-        }
-
         const { selectedWikis } = this.state;
 
-        this.setState({
-            selectedWikis: selectedWikis.concat(newWiki)
-        });
+        let match = false;
+
+        selectedWikis.map((currentWiki, idx) => {
+            if (currentWiki.id === wiki.id) {
+                match = true
+                return true;
+            }
+            return false
+        })
+
+        if (match) {
+            this.removeWiki(wiki.id)
+        } else {
+            const newWiki = {
+                conceptUri: wiki.concepturi,
+                description: wiki.description,
+                id: wiki.id,
+                label: wiki.label
+            }
+
+
+            this.setState({
+                selectedWikis: selectedWikis.concat(newWiki)
+            });
+        }
     }
 
     removeWiki(wikiId) {
@@ -105,10 +125,8 @@ class EditTopic extends Component {
     }
 
     render() {
-        const { topic, wikiDataSearch, selectedWikis, loading } = this.state;
+        const { topic, wikiDataSearch, selectedWikis, loading, loadingWiki } = this.state;
         const props = this.props;
-
-
 
         return (
             <React.Fragment>
@@ -118,7 +136,7 @@ class EditTopic extends Component {
                             topic && (
                                 <React.Fragment>
                                     <PageHeader title="Edit Topic">
-                                        <Link to={`/${this.props.currentUser.username}/topics/created`} className="breadcrumbLink">
+                                        <Link to={`/${props.currentUser.username}/topics/created`} className="breadcrumbLink">
                                             <span>My Topics</span>
                                         </Link>
                                     </PageHeader>
@@ -158,7 +176,6 @@ class EditTopic extends Component {
                                                                     description: values.description,
                                                                     wikiData: selectedWikis,
                                                                 };
-                                                                console.log(newTopic);
 
                                                                 createTopic(newTopic)
                                                                     .then(res => {
@@ -199,7 +216,7 @@ class EditTopic extends Component {
                                                                 {selectedWikis.length > 0 && (
                                                                     <div>
                                                                         Added Wiki:
-                                                                <ul>
+                                                                        <ul>
                                                                             {selectedWikis.map((wiki, idx) => {
                                                                                 return (
                                                                                     <li key={idx}>
@@ -213,7 +230,9 @@ class EditTopic extends Component {
                                                                 )}
 
                                                                 <div className="form-group row text-left">
-                                                                    <label htmlFor="topicDescription" className="col-sm-12 col-form-label">Keyword </label>
+                                                                    <label htmlFor="topicDescription" className="col-sm-12 col-form-label">
+                                                                        {loadingWiki ? (<span><img src={loadingGif} width="30" alt="" /> Searching WikiData...</span>) : 'Keyword'}
+                                                                    </label>
 
                                                                     <div className="col-sm-12">
                                                                         <input type="text" name="wikiKeyword" placeholder="Wiki keywords" onChange={this.handleKeywordChange} className="form-control" />
@@ -230,7 +249,6 @@ class EditTopic extends Component {
                                                                                     <React.Fragment>
                                                                                         <Col md="1">
                                                                                             <input type="checkbox" onChange={() => this.addWiki(wiki)} value={wiki} />
-
                                                                                         </Col>
                                                                                         <Col md="9">{wiki.description}</Col>
                                                                                         <Col md="2">
@@ -242,8 +260,6 @@ class EditTopic extends Component {
                                                                         )
                                                                     })
                                                                 )}
-
-
                                                                 <Button variant="success" type="submit" block disabled={isSubmitting}>Save</Button>
                                                             </Form>
                                                         )}
@@ -258,7 +274,6 @@ class EditTopic extends Component {
                     </React.Fragment>
                 )}
             </React.Fragment>
-
         )
     }
 }

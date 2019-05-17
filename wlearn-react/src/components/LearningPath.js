@@ -3,7 +3,7 @@ import { Col, ListGroup, Tab, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link } from "react-router-dom";
-import { faChevronRight, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faTrash, faEdit, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import QuestionModal from "./QuestionModal";
 import OptionModal from "./OptionModal";
 import { REQUEST_HEADERS } from "../constants";
@@ -195,8 +195,6 @@ export class Question extends Component {
                                         choiceId: values.choice,
                                         questionId: question.id
                                     };
-
-                                    console.log(newAnswer)
                                     giveAnswer(newAnswer)
                                         .then(res => {
                                             toast.notify("Answer given.", { position: "top-right" });
@@ -224,13 +222,22 @@ export class Question extends Component {
                                                                 className="choices"
                                                                 disabled={disabled}
                                                                 value={choice.id}
+                                                                checked={question.userAnswer && ((question.userAnswer.id === choice.id) ? true : false)}
                                                             />
                                                         } {choice.text}
                                                         {(editable || disabled) && (
-                                                            <span>
-                                                                {choice.isCorrect && " (correct)"}
-                                                            </span>
+                                                            <small className="text-success">
+                                                                <em> {choice.correct && " (correct)"}</em>
+                                                            </small>
                                                         )}
+
+                                                        {question.userAnswer && (question.userAnswer.id === choice.id) ? (
+                                                            <strong>
+                                                                {
+                                                                    choice.correct ? (<span className="text-success"> <FontAwesomeIcon icon={faCheck} /></span>) : <span className="text-danger"> <FontAwesomeIcon icon={faTimes} /></span>
+                                                                }
+                                                            </strong>
+                                                        ) : false}
 
 
                                                     </li>
