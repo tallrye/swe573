@@ -42,20 +42,25 @@ class CreateTopic extends Component {
             imageUrl: this.state.imageUrl
         };
 
-        this.setState({ loading: true })
+        if (this.state.selectedWikis.length === 0) {
+            toast.notify(<span className="text-danger">You must select at least one Wiki.</span>, { position: "top-right" });
+        } else {
+            this.setState({ loading: true })
+            createTopic(newTopic)
+                .then(response => {
+                    toast.notify("Topic created successfully.", { position: "top-right" });
+                    this.props.history.push(`/${this.props.currentUser.username}/topics/created`);
+                }).catch(error => {
+                    if (error.status === 401) {
+                        this.props.handleLogout();
+                    } else {
+                        this.setState({ loading: false })
+                        toast.notify("Something went wrong!", { position: "top-right" });
+                    }
+                });
+        }
 
-        createTopic(newTopic)
-            .then(response => {
-                toast.notify("Topic created successfully.", { position: "top-right" });
-                this.props.history.push(`/${this.props.currentUser.username}/topics/created`);
-            }).catch(error => {
-                if (error.status === 401) {
-                    this.props.handleLogout();
-                } else {
-                    this.setState({ loading: false })
-                    toast.notify('Sorry! Something went wrong. Please try again!', { position: "top-right" });
-                }
-            });
+
 
     }
 
@@ -169,12 +174,13 @@ class CreateTopic extends Component {
                                             <Form.Group className="row" >
                                                 <Form.Label column sm="12">
                                                     Title
-                                        </Form.Label>
+                                                </Form.Label>
                                                 <Col sm="12">
                                                     <Form.Control
                                                         type="text"
                                                         placeholder="Topic Title"
                                                         onChange={this.handleTitleChange}
+                                                        required
                                                     />
                                                 </Col>
                                             </Form.Group>
@@ -188,6 +194,7 @@ class CreateTopic extends Component {
                                                         type="text"
                                                         placeholder="Enter Image URL"
                                                         onChange={this.handleImageUrlChange}
+                                                        required
                                                     />
                                                 </Col>
                                             </Form.Group>
@@ -202,6 +209,7 @@ class CreateTopic extends Component {
                                                         rows="5"
                                                         placeholder="Short Description"
                                                         onChange={this.handleDescriptionChange}
+                                                        required
                                                     />
                                                 </Col>
                                             </Form.Group>

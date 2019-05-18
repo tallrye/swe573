@@ -73,6 +73,7 @@ class EditTopic extends Component {
             .then(res => {
                 this.setState({ topic: res.data, selectedWikis: res.data.wikiData, loading: false })
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
             });
     }
@@ -177,13 +178,21 @@ class EditTopic extends Component {
                                                                     wikiData: selectedWikis,
                                                                 };
 
-                                                                createTopic(newTopic)
-                                                                    .then(res => {
-                                                                        toast.notify("Content updated successfully.", { position: "top-right" });
-                                                                        props.history.push(`/topic/${topicId}`);
-                                                                    }).catch(err => {
-                                                                        toast.notify("Topic does not exist!", { position: "top-right" });
-                                                                    });
+                                                                if (selectedWikis.length === 0) {
+                                                                    toast.notify(<span className="text-danger">You must select at least one Wiki.</span>, { position: "top-right" });
+                                                                } else {
+                                                                    this.setState({ loading: true })
+                                                                    createTopic(newTopic)
+                                                                        .then(res => {
+                                                                            toast.notify("Content updated successfully.", { position: "top-right" });
+                                                                            props.history.push(`/topic/${topicId}`);
+                                                                        }).catch(err => {
+                                                                            this.setState({ loading: false })
+                                                                            toast.notify("Something went wrong!", { position: "top-right" });
+                                                                        });
+                                                                }
+
+
 
                                                                 setSubmitting(false);
                                                             }, 400);
@@ -194,14 +203,14 @@ class EditTopic extends Component {
                                                                 <div className="form-group row text-left">
                                                                     <label htmlFor="topicTitle" className="col-sm-12 col-form-label">Topic <strong>Title</strong></label>
                                                                     <div className="col-sm-12">
-                                                                        <Field type="text" name="title" id="topicTitle" placeholder="Topic title" className="form-control" />
+                                                                        <Field type="text" name="title" id="topicTitle" placeholder="Topic title" required className="form-control" />
                                                                         <ErrorMessage name="topicTitle" component="div" />
                                                                     </div>
                                                                 </div>
                                                                 <div className="form-group row text-left">
                                                                     <label htmlFor="topicImage" className="col-sm-12 col-form-label">Topic <strong>Image</strong></label>
                                                                     <div className="col-sm-12">
-                                                                        <Field type="text" name="imageUrl" id="topicImage" placeholder="Topic image" className="form-control" />
+                                                                        <Field type="text" name="imageUrl" id="topicImage" placeholder="Topic image" required className="form-control" />
                                                                         <ErrorMessage name="topicImage" component="div" />
                                                                     </div>
                                                                 </div>
@@ -209,7 +218,7 @@ class EditTopic extends Component {
                                                                 <div className="form-group row text-left">
                                                                     <label htmlFor="topicDescription" className="col-sm-12 col-form-label">Topic <strong>Body</strong> </label>
                                                                     <div className="col-sm-12">
-                                                                        <Field type="text" component="textarea" rows="7" name="description" id="description" placeholder="Topic description" className="form-control" />
+                                                                        <Field type="text" component="textarea" rows="7" name="description" required id="description" placeholder="Topic description" className="form-control" />
                                                                         <ErrorMessage name="topicDescription" component="div" />
                                                                     </div>
                                                                 </div>

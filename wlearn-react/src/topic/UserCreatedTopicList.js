@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { REQUEST_HEADERS } from "../constants";
 import axios from "axios";
+import toast from "toasted-notes";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -31,6 +32,7 @@ class UserCreatedTopicList extends Component {
                 loading: false
             })
         }).catch(err => {
+            toast.notify("Something went wrong!", { position: "top-right" });
             console.log(err)
         });
     }
@@ -42,6 +44,7 @@ class UserCreatedTopicList extends Component {
             .then(res => {
                 this.loadUserCreatedTopics()
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
             });
 

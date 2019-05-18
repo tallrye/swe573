@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { REQUEST_HEADERS } from "../constants";
 import axios from "axios";
+import toast from "toasted-notes";
 import { Link, withRouter } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { Question } from "../components/LearningPath";
@@ -27,6 +28,7 @@ class ContentQuiz extends Component {
             .then(res => {
                 this.setState({ content: res.data, loading: false })
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
             });
     }
@@ -80,7 +82,7 @@ class ContentQuiz extends Component {
                                                         }
                                                     </React.Fragment>
                                                 )}
-                                                {content.nextContentId === 0 ? (
+                                                {content.nextContentId === null ? (
                                                     <div className="text-right mt-5">
 
                                                         <Link className="btn btn-success btn-sm ml-2 inlineBtn" to={`/topic/view/${content.topicId}`}><FontAwesomeIcon icon={faCheck} /> Finalize</Link>

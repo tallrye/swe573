@@ -77,6 +77,7 @@ export class PathElement extends Component {
                 toast.notify("Material deleted successfully.", { position: "top-right" });
                 this.props.handleRefresh()
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
             });
     }
@@ -154,6 +155,7 @@ export class Question extends Component {
                 toast.notify("Question deleted successfully.", { position: "top-right" });
                 this.props.handleRefresh()
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
             });
     }

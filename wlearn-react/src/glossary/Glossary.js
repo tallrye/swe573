@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import PageHeader from "../components/PageHeader";
 import { WikiLabels } from "../components/Wiki";
 import axios from 'axios';
+import toast from "toasted-notes";
 import { resolveEndpoint } from "../util/Helpers";
 import Loading from '../components/Loading';
 
@@ -23,11 +24,23 @@ class Glossary extends Component {
         let url = resolveEndpoint('getAllTopics', []);
 
         axios.get(url).then(res => {
-            this.setState({
-                topics: res.data,
-                loading: false
-            })
+            if (this.props.currentUser) {
+                let filteredTopics = res.data.filter(
+                    obj => obj.createdBy !== this.props.currentUser.id
+                )
+                this.setState({
+                    topics: filteredTopics,
+                    loading: false
+                })
+            } else {
+                this.setState({
+                    topics: res.data,
+                    loading: false
+                })
+            }
+
         }).catch(err => {
+            toast.notify("Something went wrong!", { position: "top-right" });
             console.log(err)
         });
     }
@@ -39,6 +52,7 @@ class Glossary extends Component {
     }
 
     componentDidMount() {
+
         this.loadTopicList();
     }
 
@@ -58,6 +72,9 @@ class Glossary extends Component {
                                     </InputGroup>
                                 </div>
                             </div>
+                            {
+                                topics.length === 0 && (<div className="mt-5 text-center">Nothing to show</div>)
+                            }
                             <div className="col-md-12">
                                 {topics.filter(topic => input === '' || topic.title.toLowerCase().indexOf(input) > -1).map((topic, topicIndex) => {
                                     return (
@@ -73,7 +90,7 @@ class Glossary extends Component {
                                                     <div className="col-md-8">
                                                         <div className="card-body text-left">
                                                             <h5 className="card-title text-info text-justify mb-1">{topic.title} </h5>
-                                                            <small className="text-left"><strong>by </strong> @{topic.createdBy} {' '}</small>
+                                                            <small className="text-left"><strong>by </strong> @ {topic.createdByName} {' '}</small>
                                                             <hr />
                                                             <p className="card-text text-justify">{topic.description}</p>
                                                             <WikiLabels

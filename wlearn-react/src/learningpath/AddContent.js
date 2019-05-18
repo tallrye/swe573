@@ -72,7 +72,7 @@ class AddContent extends Component {
                                                             props.history.push(`/topic/${topicId}`);
                                                         }).catch(err => {
                                                             this.setState({ loading: false })
-                                                            toast.notify("Topic does not exist!", { position: "top-right" });
+                                                            toast.notify("Something went wrong!", { position: "top-right" });
                                                         });
 
                                                     setSubmitting(false);

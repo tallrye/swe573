@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { REQUEST_HEADERS } from "../constants";
 import axios from "axios";
-import { Row, Tab } from "react-bootstrap";
+import toast from "toasted-notes";
+import { Row, Tab, Button } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons'
@@ -22,6 +23,7 @@ class Topic extends Component {
             loading: true
         };
         this.loadTopicById = this.loadTopicById.bind(this);
+        this.togglePublish = this.togglePublish.bind(this)
     }
 
 
@@ -35,7 +37,29 @@ class Topic extends Component {
                     loading: false
                 })
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
+            });
+    }
+
+    togglePublish(topicId, publish) {
+
+        let url = resolveEndpoint('toggleTopicPublish', []);
+        let reqObj = {
+            topicId: topicId,
+            publish: publish
+        }
+
+        this.setState({ loading: true })
+
+        axios.post(url, reqObj, REQUEST_HEADERS)
+            .then(res => {
+                this.setState({ loading: false })
+                toast.notify("Status changed.", { position: "top-right" });
+                this.loadTopicById()
+            }).catch(err => {
+                this.setState({ loading: false })
+                toast.notify(<span className="text-danger">{err.response.data.message}</span>, { position: "top-right" });
             });
     }
 
@@ -64,6 +88,17 @@ class Topic extends Component {
                                     </Link>
                                 )}
                         </PageHeader>
+
+                        {
+                            editable && (
+                                <Button
+                                    className="btn btn-success fullWidth"
+                                    variant={topic.published ? 'danger' : 'warning'}
+                                    onClick={() => this.togglePublish(topic.id, !topic.published)}>
+                                    {topic.published ? 'Unpublish' : 'Publish This Topic'}
+                                </Button>
+                            )
+                        }
 
                         <div className="bg-alt sectionPadding text-left">
                             <div className="container">

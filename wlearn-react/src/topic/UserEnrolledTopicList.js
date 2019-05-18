@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { REQUEST_HEADERS } from "../constants";
 import axios from "axios";
+import toast from "toasted-notes";
 import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { WikiLabels } from "../components/Wiki";
@@ -30,6 +31,7 @@ class UserEnrolledTopicList extends Component {
                 loading: false
             })
         }).catch(err => {
+            toast.notify("Something went wrong!", { position: "top-right" });
             console.log(err)
         });
     }
@@ -49,7 +51,9 @@ class UserEnrolledTopicList extends Component {
                         <PageHeader title="Topics I Follow" />
 
                         <div className="container">
-
+                            {
+                                topics.length === 0 && (<div className="mt-5 text-center">Nothing to show</div>)
+                            }
                             <div className="row mt-5">
                                 {
                                     topics.map((topic, topicIndex) => {

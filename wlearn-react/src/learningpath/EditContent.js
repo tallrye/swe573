@@ -29,6 +29,7 @@ class EditContent extends Component {
             .then(res => {
                 this.setState({ content: res.data, loading: false })
             }).catch(err => {
+                toast.notify("Something went wrong!", { position: "top-right" });
                 console.log(err)
             });
     }
@@ -94,7 +95,7 @@ class EditContent extends Component {
                                                                         toast.notify("Content updated successfully.", { position: "top-right" });
                                                                         props.history.push(`/topic/${topicId}`);
                                                                     }).catch(err => {
-                                                                        toast.notify("Topic does not exist!", { position: "top-right" });
+                                                                        toast.notify("Something went wrong!", { position: "top-right" });
                                                                     });
 
                                                                 setSubmitting(false);
