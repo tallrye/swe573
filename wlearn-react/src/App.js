@@ -24,6 +24,7 @@ import AddContent from "./learningpath/AddContent";
 import EditContent from "./learningpath/EditContent";
 import ContentQuiz from "./learningpath/ContentQuiz";
 import ViewContent from "./learningpath/ViewContent";
+import Loading from './components/Loading';
 
 class App extends Component {
     constructor(props) {
@@ -82,7 +83,7 @@ class App extends Component {
 
     render() {
         if (this.state.isLoading) {
-            return <h4 className="text-center mt-5">Please wait...</h4>
+            return <Loading />
         } else {
             return (
                 <div className="App">
@@ -165,6 +166,7 @@ class App extends Component {
 
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
+                                currentUser={this.state.currentUser}
                                 path="/topic/:topicId/content"
                                 exact={true}
                                 component={AddContent}

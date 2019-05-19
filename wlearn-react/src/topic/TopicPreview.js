@@ -130,7 +130,7 @@ class TopicPreview extends Component {
                     <React.Fragment>
                         {resolved && (
                             <div>
-                                <PageHeader title="Details">
+                                <PageHeader title="Details" bg={topic.imageUrl}>
                                     <Link to={`/explore`} className="breadcrumbLink">
                                         <span>Explore</span>
                                     </Link>
@@ -168,24 +168,27 @@ class TopicPreview extends Component {
                                     </div>
                                 </div>
 
-                                <div className="container mt-5">
-                                    <div className="row col-md-12 text-left">
-                                        <h4>
-                                            Learning <strong>Path</strong>
-                                        </h4>
+                                <div className="sectionPadding">
+                                    <div className="container">
+                                        <div className="row col-md-12 text-left">
+                                            <h4>
+                                                Learning <strong>Path</strong>
+                                            </h4>
+                                        </div>
                                     </div>
+                                    {
+                                        activeTab && (
+                                            <Tab.Container id="list-group-tabs-example" defaultActiveKey={activeTab}>
+                                                <div className="container mt-5 text-left" >
+                                                    <Row>
+                                                        <PathNavigator contents={topic.contentList} preview={true} />
+                                                    </Row>
+                                                </div>
+                                            </Tab.Container>
+                                        )
+                                    }
+
                                 </div>
-                                {
-                                    activeTab && (
-                                        <Tab.Container id="list-group-tabs-example" defaultActiveKey={activeTab}>
-                                            <div className="container mt-5 text-left" >
-                                                <Row>
-                                                    <PathNavigator contents={topic.contentList} preview={true} />
-                                                </Row>
-                                            </div>
-                                        </Tab.Container>
-                                    )
-                                }
                             </div>
                         )}
                     </React.Fragment>

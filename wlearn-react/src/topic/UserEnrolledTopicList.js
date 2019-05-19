@@ -7,6 +7,7 @@ import PageHeader from "../components/PageHeader";
 import { WikiLabels } from "../components/Wiki";
 import { resolveEndpoint } from "../util/Helpers";
 import Loading from '../components/Loading';
+import page_banner from "../img/study.jpeg"
 
 class UserEnrolledTopicList extends Component {
     constructor(props) {
@@ -48,9 +49,9 @@ class UserEnrolledTopicList extends Component {
             <React.Fragment>
                 {loading ? <Loading /> : (
                     <React.Fragment>
-                        <PageHeader title="Topics I Follow" />
+                        <PageHeader title="Topics I Follow" bg={page_banner} />
 
-                        <div className="container">
+                        <div className="container minHeightContent">
                             {
                                 topics.length === 0 && (<div className="mt-5 text-center">Nothing to show</div>)
                             }

@@ -55,7 +55,7 @@ class ContentQuiz extends Component {
 
                         {
                             content && (
-                                <div className="bg-alt sectionPadding text-left">
+                                <div className="sectionPadding text-left">
                                     <div className="container">
                                         <div className="row">
                                             <div className="col-md-8">

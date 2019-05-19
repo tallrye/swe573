@@ -6,6 +6,9 @@ import toast from "toasted-notes";
 import EditorField from '../components/EditorField'
 import Loading from '../components/Loading';
 import ThingsToConsider from '../components/partials/ThingsToConsider';
+import page_banner from "../img/kitchen.jpeg"
+import PageHeader from "../components/PageHeader";
+import { Link, withRouter } from "react-router-dom";
 
 class AddContent extends Component {
     constructor(props) {
@@ -26,15 +29,12 @@ class AddContent extends Component {
             <React.Fragment>
                 {loading ? <Loading /> : (
                     <React.Fragment>
-                        <div className="pageHeader text-left">
-                            <div className="container">
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        Add Material
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <PageHeader title="Add Material" bg={page_banner}>
+                            <Link to={`/topic/${props.match.params.topicId}`} className="breadcrumbLink">
+                                <span>My Topics</span>
+                            </Link>
+                        </PageHeader>
+
                         <div className="sectionPadding">
                             <div className="container text-left ">
                                 <div className="row">
@@ -113,4 +113,4 @@ class AddContent extends Component {
     }
 }
 
-export default AddContent;
+export default withRouter(AddContent);

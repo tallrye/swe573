@@ -47,7 +47,7 @@ class ViewContent extends Component {
             <React.Fragment>
                 {(loading || refreshed) ? <Loading /> : (
                     <React.Fragment>
-                        <PageHeader title="Content Quiz">
+                        <PageHeader title={content.title}>
                             <Link to={`/topic/view/${content.topicId}`} className="breadcrumbLink">
                                 <span>{content.topicTitle}</span>
                             </Link>
@@ -55,7 +55,7 @@ class ViewContent extends Component {
 
                         {
                             content && (
-                                <div className="bg-alt sectionPadding text-left">
+                                <div className=" sectionPadding text-left">
                                     <div className="container">
                                         <div className="row">
                                             <div className="col-md-12">

@@ -7,6 +7,10 @@ import axios from 'axios';
 import toast from "toasted-notes";
 import { resolveEndpoint } from "../util/Helpers";
 import Loading from '../components/Loading';
+import page_banner from "../img/handcrafted.jpg"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import WOW from "wow.js";
 
 class Glossary extends Component {
     constructor(props) {
@@ -52,7 +56,8 @@ class Glossary extends Component {
     }
 
     componentDidMount() {
-
+        const wow = new WOW();
+        wow.init();
         this.loadTopicList();
     }
 
@@ -63,12 +68,13 @@ class Glossary extends Component {
             <React.Fragment>
                 {loading ? <Loading /> : (
                     <React.Fragment>
-                        <PageHeader title="Explore" />
+                        <PageHeader title="Explore" bg={page_banner} />
                         <div className="container">
                             <div className="row  mt-5 mb-5">
                                 <div className="col-md-12">
                                     <InputGroup>
-                                        <input value={input} placeholder="Search topics" className="form-control searchInput" type="text" onChange={this.handleSearch} />
+                                        <FontAwesomeIcon icon={faSearch} />
+                                        <input value={input} placeholder="Search " className="form-control searchInput" type="text" onChange={this.handleSearch} />
                                     </InputGroup>
                                 </div>
                             </div>
@@ -76,20 +82,21 @@ class Glossary extends Component {
                                 topics.length === 0 && (<div className="mt-5 text-center">Nothing to show</div>)
                             }
                             <div className="col-md-12">
+
                                 {topics.filter(topic => input === '' || topic.title.toLowerCase().indexOf(input) > -1).map((topic, topicIndex) => {
                                     return (
                                         <Row className="mb-1" key={topicIndex}>
-                                            <div className="card mb-4" style={{ minWidth: "100%" }}>
+                                            <div className="card mb-4 wow fadeIn" data-wow-delay={`0.${topicIndex + 1}s`} style={{ minWidth: "100%" }}>
                                                 <div className="row no-gutters ">
                                                     <div className="col-md-4">
                                                         <div className="clear p-4">
                                                             <img src={topic.imageUrl} className="img-fluid fullWidth mb-4" alt={topic.title} />
-                                                            <Link className="btn btn-sm btn-primary fullWidth" to={`/topic/preview/${topic.id}`}>Details</Link>
+                                                            <Link className="btn btn-sm btn-orange fullWidth" to={`/topic/preview/${topic.id}`}>Details</Link>
                                                         </div>
                                                     </div>
                                                     <div className="col-md-8">
                                                         <div className="card-body text-left">
-                                                            <h5 className="card-title text-info text-justify mb-1">{topic.title} </h5>
+                                                            <h5 className="card-title text-info serif font-24 text-justify mb-1">{topic.title} </h5>
                                                             <small className="text-left"><strong>by </strong> @ {topic.createdByName} {' '}</small>
                                                             <hr />
                                                             <p className="card-text text-justify">{topic.description}</p>

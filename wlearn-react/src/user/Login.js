@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../constants';
 import toast from "toasted-notes";
 import Loading from '../components/Loading';
+import WOW from "wow.js";
+import page_banner from "../img/library.jpeg"
 
 class Login extends Component {
     constructor(props) {
@@ -33,6 +35,11 @@ class Login extends Component {
         return this.form.current.reportValidity();
     }
 
+    componentDidMount() {
+        const wow = new WOW();
+        wow.init();
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         const err = !this.validate();
@@ -59,31 +66,39 @@ class Login extends Component {
         return (
             <React.Fragment>
                 {loading ? <Loading /> : (
-                    <div className="sectionPadding bg-alt">
-                        <div className="container w-25 mt-5">
-                            <h4 className="mt-5 mb-5 text-left">Login to your account</h4>
-                            <Form ref={this.form} onSubmit={this.handleSubmit}>
-                                <Form.Group className="row" controlId="formPlaintextUsernameOrEmail">
-                                    <Col sm="12">
-                                        <Form.Control type="text" placeholder="Username or e-mail" required onChange={this.handleUsernameOrEmailChange} />
-                                    </Col>
-                                </Form.Group>
+                    <div className="pageHeader loginPage text-left" style={{ backgroundImage: `url(${page_banner})` }}>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-12 serif">
+                                    <div className="container w-50 mt-5">
+                                        <h4 className="mt-5 mb-5 text-left wow fadeIn"><br /> Login to your account</h4>
+                                        <Form ref={this.form} onSubmit={this.handleSubmit} className="authForm">
+                                            <Form.Group className="row wow fadeIn" controlId="formPlaintextUsernameOrEmail">
+                                                <Col sm="12">
+                                                    <Form.Control type="text" placeholder="Username or e-mail" required onChange={this.handleUsernameOrEmailChange} />
+                                                </Col>
+                                            </Form.Group>
 
-                                <Form.Group className="row" controlId="formPlaintextPassword" >
-                                    <Col sm="12">
-                                        <Form.Control type="password" placeholder="Password" required onChange={this.handlePasswordChange} />
-                                    </Col>
-                                </Form.Group>
+                                            <Form.Group className="row wow fadeIn" data-wow-delay="0.1s" controlId="formPlaintextPassword" >
+                                                <Col sm="12">
+                                                    <Form.Control type="password" placeholder="Password" required onChange={this.handlePasswordChange} />
+                                                </Col>
+                                            </Form.Group>
 
-                                <Button className="mt-4" variant="primary" type="submit" block>
-                                    Login
-                                </Button>
-                                <br />
-
-                                Don't have an account? <Link to="/signup">Signup now!</Link>
-                            </Form>
+                                            <Button className="mt-4 btn-orange wow fadeIn" data-wow-delay="0.2s" variant="primary" type="submit" block>
+                                                Login
+                                            </Button>
+                                            <br />
+                                            <span className="wow fadeIn" data-wow-delay="0.3s">
+                                                Don't have an account? <Link to="/signup" className="text-orange">Signup now!</Link>
+                                            </span>
+                                        </Form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 )}
             </React.Fragment>
         );

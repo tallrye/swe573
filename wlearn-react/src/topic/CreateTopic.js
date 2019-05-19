@@ -9,6 +9,7 @@ import PageHeader from "../components/PageHeader";
 import Loading from '../components/Loading';
 import ThingsToConsider from '../components/partials/ThingsToConsider';
 import loadingGif from '../img/loading.gif'
+import page_banner from "../img/kitchen.jpeg"
 
 class CreateTopic extends Component {
     constructor(props) {
@@ -159,7 +160,7 @@ class CreateTopic extends Component {
             <React.Fragment>
                 {loading ? <Loading /> : (
                     <React.Fragment>
-                        <PageHeader title="Create a Topic">
+                        <PageHeader title="Create a Topic" bg={page_banner}>
                             <Link to={`/${props.currentUser.username}/topics/created`} className="breadcrumbLink">
                                 <span>My Topics</span>
                             </Link>

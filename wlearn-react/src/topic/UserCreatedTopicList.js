@@ -10,6 +10,8 @@ import PageHeader from "../components/PageHeader";
 import { WikiLabels } from "../components/Wiki";
 import { resolveEndpoint } from "../util/Helpers";
 import Loading from '../components/Loading';
+import page_banner from "../img/my-topics.jpeg"
+import WOW from "wow.js";
 
 class UserCreatedTopicList extends Component {
     constructor(props) {
@@ -51,7 +53,9 @@ class UserCreatedTopicList extends Component {
     }
 
     componentDidMount() {
-        this.loadUserCreatedTopics()
+        this.loadUserCreatedTopics();
+        const wow = new WOW();
+        wow.init();
     }
 
     render() {
@@ -62,37 +66,39 @@ class UserCreatedTopicList extends Component {
             <React.Fragment>
                 {loading ? <Loading /> : (
                     <React.Fragment>
-                        <PageHeader title="My Topics" />
+                        <PageHeader title="My Topics" bg={page_banner} />
 
-                        <div className="container">
-                            <div className="row mt-5">
-                                <div className="col-md-12">
-                                    <Link to="/topic/new" className="btn btn-success">
-                                        <FontAwesomeIcon icon={faPlus} /> Create a Topic
-                            </Link>
+                        <div className="sectionPadding minHeightContent">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <Link to="/topic/new" className="btn btn-success fullWidth">
+                                            <FontAwesomeIcon icon={faPlus} /> Create a Topic
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="row mt-5">
-                                {
-                                    topics.map((topic, topicIndex) => {
-                                        return (
-                                            <div className="col-md-4" key={topicIndex}>
-                                                <div className="card" style={{ padding: '20px' }}>
-                                                    <div className="card-bod">
-                                                        <img src={topic.imageUrl} className="img-fluid mb-2" alt={topic.title} />
-                                                        <h4>{topic.title}</h4>
-                                                        <div className="topicCaption">{topic.description}</div>
-                                                        <WikiLabels wikis={topic.wikiData} />
-                                                        <hr />
-                                                        <Link className="btn btn-sm btn-outline-primary" to={`/topic/${topic.id}`}>Details</Link>
-                                                        <Button className="ml-2 btn-sm" variant="outline-danger" onClick={() => this.handleDeleteTopicById(topic.id)}>Delete</Button>
+                                <div className="row mt-5">
+                                    {
+                                        topics.map((topic, topicIndex) => {
+                                            return (
+                                                <div className="col-md-4 wow fadeIn" data-wow-delay={`0.${topicIndex + 1}s`} key={topicIndex}>
+                                                    <div className="card" style={{ padding: '20px' }}>
+                                                        <div className="card-bod">
+                                                            <img src={topic.imageUrl} className="img-fluid mb-2" alt={topic.title} />
+                                                            <h4>{topic.title}</h4>
+                                                            <div className="topicCaption">{topic.description}</div>
+                                                            <WikiLabels wikis={topic.wikiData} />
+                                                            <hr />
+                                                            <Link className="btn btn-sm btn-outline-primary" to={`/topic/${topic.id}`}>Details</Link>
+                                                            <Button className="ml-2 btn-sm" variant="outline-danger" onClick={() => this.handleDeleteTopicById(topic.id)}>Delete</Button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    })
-                                }
+                                            )
+                                        })
+                                    }
+                                </div>
                             </div>
                         </div>
                     </React.Fragment>)

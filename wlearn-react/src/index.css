@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,700&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Didact+Gothic&display=swap&subset=latin-ext');
 @import url('https://fonts.googleapis.com/css?family=Amiri:400,700&display=swap&subset=latin-ext');
 
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Didact Gothic', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -13,12 +14,31 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
+.App{
+    position: relative;
+}
 .serif{
     font-family: 'Amiri', serif;
     font-size: 20px;
 }
-
+.font-14{
+    font-size: 14px;
+}
+.font-20{
+    font-size: 20px;
+}
+.font-24{
+    font-size: 24px;
+}
+.font-30{
+    font-size: 30px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 /************************* 
     APP HEADER
 *************************/
@@ -32,23 +52,33 @@ code {
 }
 
 .myNavbar{
-    border-bottom: 1px solid #cdcdcd;
-    -webkit-box-shadow: 0px 1px 2px 0px rgb(223, 223, 223);
-    -moz-box-shadow: 0px 1px 2px 0px rgba(223, 223, 223);
-    box-shadow: 0px 1px 2px 0px rgba(223, 223, 223);
+    padding-right:40px !important;
+    padding-left: 40px!important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: none !important;
 }
 
 .navbar-dark .navbar-nav .nav-link{
-    color: rgb(61, 61, 61);
+    color: white;
     font-size: 0.9rem;
 }
+.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:active, .navbar-dark .navbar-nav .nav-link:focus{
+    color: white !important;
+}
 .nav-link.btn{
-    color: #007bff !important;
+    color: white !important;
 }
 
 .nav-link.btn:hover, .nav-link.btn:active, .nav-link.btn:focus{
     color: #fff !important;
-    background: #007bff !important;
+    background: #f44336 !important;
+    border-color: #f44336 !important;
+    box-shadow: none !important;
+    outline: 0 important;
 }
 .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:active{
     color: black;
@@ -57,21 +87,22 @@ code {
 }
 
 .dropdown.nav-item{
-    border-left: 1px solid #cdcdcd;
-    margin-left: 30px;
-    padding-left: 30px;
+    margin-left: 10px;
+    padding-left: 10px;
 }
 
+a:hover{
+    text-decoration: none !important;
 
+}
 /************************* 
     NOT FOUND & SERVER ERROR
 *************************/
 .page-not-found {
-    max-width: 500px;
+    max-width: 50vw;
     margin: 0 auto;
     margin-top: 50px;
     padding: 40px;
-    border: 1px solid #c8c8c8; 
     text-align: center;   
 }
 
@@ -121,7 +152,11 @@ code {
 .text-info{
     color: black !important;
 }
-
+.hero{
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 34px;
+}
 .myFooter{
     border-top: 1px solid #cdcdcd;
     padding: 20px 0;
@@ -130,13 +165,50 @@ code {
     
 }
 .pageHeader{
-    padding: 30px;
+    padding: 30vh 0 5vh;
     color: white;
     background-color: rgb(61, 61, 61);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
     font-size: 18px;
+    position: relative;
+    z-index: 0;
+    height: 50vh;
 }
+
+.pageHeader.homePageIntro{
+    padding: 50vh 0 30vh;
+    height: 100vh;
+}
+
+.pageHeader.loginPage{
+    padding: 200px 0 100px;
+    height: 100vh;
+}
+
+.pageHeader h2{
+    font-size: 42px;
+}
+.pageHeader:after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0.7;
+    z-index: -1;
+
+}
+.minHeightContent{
+    min-height: 900px;
+}
+
+
 .mainContent{
-    min-height: 920px;
+    min-height: 100vh;
 }
 
 .myFooter svg{
@@ -288,10 +360,12 @@ code {
     background: white !important;
     color: #212529 !important;
     border-radius: 0 !important;
+    
 }
 
 .Toaster__alert_text{
     color: #212529 !important;
+    font-family: 'Amiri', serif !important;
 }
 
 .Toaster__manager-top-right{
@@ -306,7 +380,7 @@ code {
 .breadcrumbLink{
     color: white;
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -333,6 +407,15 @@ code {
 
 .searchInput{
     border-radius: 0;
+    padding-left: 34px;
+}
+
+.input-group svg{
+    position: absolute;
+    left: 10px;
+    top: 11px;
+    z-index: 9;
+    color: #3d444c;
 }
 
 .questionUl{
@@ -410,4 +493,58 @@ code {
 
 .list-group-item.list-group-item-action a:hover{
     text-decoration: none;
+}
+
+.btn-outline-orange{
+    color: #FF644E !important;
+    border-color: #FF644E !important;
+}
+
+.btn-outline-orange:hover, .btn-outline-orange:active, .btn-outline-orange:focus{
+    color: white !important;
+    border-color: #FF644E !important;
+    background-color: #FF644E !important;
+    box-shadow: none !important;
+    outline: 0 important;
+}
+
+.btn-orange{
+    background-color: #FF644E !important;
+    color: white !important;
+    border-color: #FF644E !important;
+}
+.btn-orange:hover, .btn-orange:active, .btn-orange:focus{
+    background-color: #FF644E !important;
+    color: white !important;
+    border-color: #FF644E !important;
+}
+
+.btn-success{
+    background-color: #1DB100 !important;
+}
+
+.badge-dark{
+    background-color: #282345;
+}
+
+.text-orange{
+    color: #FF644E;
+}
+
+a.text-orange:hover, a.text-orange:active, a.text-orange:focus{
+    color: #FF644E;
+}
+
+.loadingDiv{
+    background: white;
+    z-index: 99999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 100px 0;
+}
+
+.font-white-important{
+    color: white !important;
 }

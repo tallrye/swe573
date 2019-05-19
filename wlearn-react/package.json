@@ -17,7 +17,8 @@
     "react-rte": "^0.16.1",
     "react-scripts": "2.1.8",
     "toasted-notes": "^2.1.5",
-    "wikidata-sdk": "^6.4.0"
+    "wikidata-sdk": "^6.4.0",
+    "wow.js": "^1.2.2"
   },
   "scripts": {
     "start": "react-scripts start",

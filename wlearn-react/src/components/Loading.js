@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import loadingGif from '../img/loading.gif'
-import { Col } from "react-bootstrap";
+import loadingGif from '../img/loading2.gif'
 
 
 export default class Loading extends Component {
 
     render() {
         return (
-            <Col sm={12} className="text-center mt-5">
-                <img src={loadingGif} alt="" /> <br /> Loading...
-            </Col>
+            <div className="text-center loadingDiv serif font-30">
+                <img src={loadingGif} alt="" /> <br /> <br />Loading...
+            </div>
         )
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 
 class AppHeader extends Component {
 
@@ -25,7 +25,7 @@ class AppHeader extends Component {
                 <Nav className="ml-auto">
                     <Nav.Link as={Link} className="ml-2" to="/explore">Explore</Nav.Link>
                     <Nav.Link as={Link} className="ml-2" to="/login">Login</Nav.Link>
-                    <Nav.Link as={Link} className="ml-2 btn btn-sm btn-outline-primary" to="/signup">Sign Up</Nav.Link>
+                    <Nav.Link as={Link} className="ml-2 btn btn-sm btn-outline-primary btn-orange text-white" to="/signup">Sign Up</Nav.Link>
                 </Nav>
         } else {
             menuItems =
@@ -42,17 +42,15 @@ class AppHeader extends Component {
 
         return (
             <Navbar bg="white" className="myNavbar" variant="dark" expand="lg">
-                <Container>
-                    <Navbar.Brand>
-                        <Link to="/" style={{ textDecoration: 'none', color: 'black', fontWeight: '400' }}>
-                            W-<strong style={{ fontWeight: '700' }}>Learn</strong>
-                        </Link>
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        {menuItems}
-                    </Navbar.Collapse>
-                </Container>
+                <Navbar.Brand>
+                    <Link to="/" className="serif" style={{ textDecoration: 'none', color: 'white', fontWeight: '400', fontSize: '25px' }}>
+                        W-<strong style={{ fontWeight: '700' }}>Learn</strong>
+                    </Link>
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    {menuItems}
+                </Navbar.Collapse>
             </Navbar>
         );
     }

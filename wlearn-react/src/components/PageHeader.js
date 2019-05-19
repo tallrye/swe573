@@ -1,24 +1,28 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import WOW from "wow.js";
 
 class PageHeader extends Component {
-
+    componentDidMount() {
+        const wow = new WOW();
+        wow.init();
+    }
     render() {
         const props = this.props;
         return (
 
-            <div className="pageHeader text-left">
+            <div className="pageHeader text-left" style={{ backgroundImage: `url(${props.bg})` }}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-6">
-                            {props.title}
-                        </div>
-                        <div className="col-md-6 text-right">
-                            <Link to={`/`} className="breadcrumbLink">
-                                <span>Home</span>
-                            </Link>
-                            {props.children}
-                            <span className="breadcrumbLink">{props.title}</span>
+                        <div className="col-md-12 serif">
+                            <span className="wow fadeIn">
+                                <Link to={`/`} className="breadcrumbLink">
+                                    <span>Home</span>
+                                </Link>
+                                {props.children}
+                                <span className="breadcrumbLink">{props.title}</span>
+                            </span>
+                            <h2 className="serif wow fadeIn" data-wow-offset="50" data-wow-delay="0.2s">{props.title}</h2>
                         </div>
                     </div>
                 </div>
