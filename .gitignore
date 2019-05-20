@@ -12,19 +12,54 @@ HELP.md
 **/.vscode/
 
 # dependencies
-**/wlearn-react/node_modules
-**/wlearn-react/.pnp
-**/wlearn-react.pnp.js
+**/front-end/node_modules
+**/front-end/.pnp
+**/front-end.pnp.js
 
 # testing
-**/wlearn-react/coverage
+**/front-end/coverage
 
 # production
-**/wlearn-react/build
+**/front-end/build
 
 # misc
 **/.DS_Store
 
-**/wlearn-react/npm-debug.log*
-**/wlearn-react/yarn-debug.log*
-**/wlearn-react/yarn-error.log*
+**/front-end/npm-debug.log*
+**/front-end/yarn-debug.log*
+**/front-end/yarn-error.log*
+
+HELP.md
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+
+### VS Code ###
+**/.vscode/
+
+# misc
+**/.DS_Store

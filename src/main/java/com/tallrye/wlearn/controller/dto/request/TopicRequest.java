@@ -1,0 +1,47 @@
+package com.tallrye.wlearn.controller.dto.request;
+
+import com.tallrye.wlearn.persistence.model.Content;
+import com.tallrye.wlearn.persistence.model.User;
+import com.tallrye.wlearn.persistence.model.WikiData;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Set;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class TopicRequest {
+
+
+    private Long id = 0L;
+
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String description;
+    
+    private String createdByName;
+
+    @NotBlank
+    private String imageUrl;
+
+    @Nullable
+    private Set<WikiData> wikiData;
+
+    @Nullable
+    private Set<User> enrolledUsers;
+
+    @Nullable
+    private List<Content> contentList;
+
+}
