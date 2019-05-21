@@ -170,7 +170,7 @@ class CreateTopic extends Component {
                             <div className="container w-90">
                                 <div className="row">
                                     <ThingsToConsider />
-                                    <div className="col-md-8 offset-md-1">
+                                    <div className="col-md-10 offset-md-1 mt-5 mb-5">
                                         <Form onSubmit={this.handleSubmit}>
                                             <Form.Group className="row" >
                                                 <Form.Label column sm="12">

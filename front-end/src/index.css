@@ -274,7 +274,10 @@ a:hover{
     float: right;
     margin-top: 4px;
 }
-
+.minWiki .wikiCards{
+    max-height: 50px;
+    overflow: hidden;
+}
 .button:active, 
  button:active,
 .button:focus, 
@@ -288,7 +291,7 @@ a:hover{
 }
 
 .DraftEditor-root {
-    height: 250px !important;
+    height: 650px !important;
 }
 
 .RichEditor-root {
@@ -365,6 +368,19 @@ a:hover{
     padding: 20px;
     border: 1px solid #cdcdcd; 
     margin-bottom: 100px;
+}
+
+.materialBody img{
+    max-width: 70%;
+    margin: 0 auto;
+    display: block;
+    height: auto;
+}
+
+.maxCaption{
+    height: 160px;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .fontMedium{

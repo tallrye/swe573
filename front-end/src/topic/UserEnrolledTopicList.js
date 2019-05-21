@@ -61,13 +61,14 @@ class UserEnrolledTopicList extends Component {
                                         return (
                                             <div className="col-md-4" key={topicIndex}>
                                                 <div className="card" style={{ padding: '20px' }}>
-                                                    <div className="card-bod">
-                                                        <img src={topic.imageUrl} className="img-fluid mb-2" alt={topic.title} />
-                                                        <h4>{topic.title}</h4>
-                                                        <div className="topicCaption">{topic.description}</div>
+                                                    <div className="card-bod minWiki">
+                                                        <div className="maxCaption"><img src={topic.imageUrl} className="img-fluid mb-2" alt={topic.title} /></div>
+                                                        <h4 className="serif font-24">{topic.title}</h4>
+                                                        <div className="topicCaption mb-3">{topic.description}</div>
+                                                        <br />
                                                         <WikiLabels wikis={topic.wikiData} />
                                                         <hr />
-                                                        <Link className="btn btn-sm btn-outline-primary" to={`/topic/view/${topic.id}`}>Details</Link>
+                                                        <Link className="btn btn-sm fullWidth btn-orange" to={`/topic/view/${topic.id}`}>Details</Link>
                                                     </div>
                                                 </div>
                                             </div>

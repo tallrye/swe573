@@ -9,6 +9,8 @@ import toast from "toasted-notes";
 import PageHeader from "../components/PageHeader";
 import EditorField from '../components/EditorField'
 import { resolveEndpoint } from "../util/Helpers";
+import page_banner from "../img/kitchen.jpeg"
+import ThingsToConsider from '../components/partials/ThingsToConsider';
 import Loading from '../components/Loading';
 
 class EditContent extends Component {
@@ -49,7 +51,7 @@ class EditContent extends Component {
                             content && (
 
                                 <div>
-                                    <PageHeader title="Edit Content" intro="Be the mentor you once needed. Share what's on your mind & help others to grow.">
+                                    <PageHeader title="Edit Content" bg={page_banner} intro="Be the mentor you once needed. Share what's on your mind & help others to grow.">
                                         <Link to={`/topic/${content.topicId}`} className="breadcrumbLink">
                                             <span>{content.title}</span>
                                         </Link>
@@ -57,13 +59,8 @@ class EditContent extends Component {
                                     <div className="sectionPadding">
                                         <div className="container text-left ">
                                             <div className="row">
-                                                <div className="col-md-3">
-                                                    <h4 style={{ fontSize: '20px' }}>Things to <strong>Consider</strong></h4>
-                                                    <hr />
-                                                    <p style={{ fontSize: '14px', textAlign: 'justify' }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque ipsam ut consectetur vel excepturi alias laboriosam totam
-                            fuga reprehenderit officiis, sed aliquam accusamus repellat laborum! Fuga cupiditate porro exercitationem quod.</p>
-                                                </div>
-                                                <div className="col-md-8 offset-md-1">
+                                                <ThingsToConsider />
+                                                <div className="col-md-10 offset-md-1 mt-5 mb-5">
                                                     <Formik
                                                         initialValues={{ title: content.title, text: content.text }}
                                                         validate={values => {

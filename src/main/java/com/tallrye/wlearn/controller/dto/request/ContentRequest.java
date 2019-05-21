@@ -1,14 +1,10 @@
 package com.tallrye.wlearn.controller.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.NonNull;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -27,6 +23,6 @@ public class ContentRequest {
     private String title;
 
     @NotBlank
-    @Size(max = 1000)
+    @Column(columnDefinition="TEXT")
     private String text;
 }

@@ -9,6 +9,7 @@ import { Col, Button, Row } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { resolveEndpoint } from "../util/Helpers";
+import ThingsToConsider from '../components/partials/ThingsToConsider';
 import Loading from '../components/Loading';
 import loadingGif from '../img/loading.gif'
 
@@ -145,12 +146,8 @@ class EditTopic extends Component {
                                     <div className="sectionPadding">
                                         <div className="container w-90 text-left">
                                             <div className="row">
-                                                <div className="col-md-3">
-                                                    <h4 style={{ fontSize: '20px' }}>Things to <strong>Consider</strong></h4>
-                                                    <hr />
-                                                    <p style={{ fontSize: '14px', textAlign: 'justify' }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque ipsam ut consectetur vel excepturi alias laboriosam totam fuga reprehenderit officiis, sed aliquam accusamus repellat laborum! Fuga cupiditate porro exercitationem quod.</p>
-                                                </div>
-                                                <div className="col-md-8 offset-md-1">
+                                                <ThingsToConsider />
+                                                <div className="col-md-10 offset-md-1 mt-5 mb-5">
                                                     <Formik
                                                         initialValues={{ title: topic.title ? topic.title : '', description: topic.description ? topic.description : '', imageUrl: topic.imageUrl ? topic.imageUrl : '', wikiKeyword: '' }}
                                                         validate={values => {

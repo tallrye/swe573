@@ -23,7 +23,7 @@ export class WikiLabels extends Component {
             <React.Fragment>
                 {
                     wikiData.length > 0 && (
-                        <p className="card-text ">
+                        <p className="card-text wikiCards">
                             {wikiData.map((wiki, idx) => {
                                 return <WikiLabel key={idx} wiki={wiki} />
                             })}

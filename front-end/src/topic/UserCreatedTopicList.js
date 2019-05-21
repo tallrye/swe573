@@ -84,10 +84,11 @@ class UserCreatedTopicList extends Component {
                                             return (
                                                 <div className="col-md-4 wow fadeIn" data-wow-delay={`0.${topicIndex + 1}s`} key={topicIndex}>
                                                     <div className="card" style={{ padding: '20px' }}>
-                                                        <div className="card-bod">
-                                                            <img src={topic.imageUrl} className="img-fluid mb-2" alt={topic.title} />
-                                                            <h4>{topic.title}</h4>
+                                                        <div className="card-bod minWiki">
+                                                            <div className="maxCaption"><img src={topic.imageUrl} className="img-fluid mb-2" alt={topic.title} /></div>
+                                                            <h4 className="serif font-24">{topic.title}</h4>
                                                             <div className="topicCaption">{topic.description}</div>
+                                                            <br />
                                                             <WikiLabels wikis={topic.wikiData} />
                                                             <hr />
                                                             <Link className="btn btn-sm fullWidth btn-orange " to={`/topic/${topic.id}`}>Details</Link>

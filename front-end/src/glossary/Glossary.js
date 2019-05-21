@@ -84,12 +84,12 @@ class Glossary extends Component {
                                 {
                                     topics.length === 0 && (<div className="mt-5 text-center">Nothing to show</div>)
                                 }
-                                <div className="col-md-12">
+                                <div className="col-md-12 mb-5">
 
                                     {topics.filter(topic => input === '' || topic.title.toLowerCase().indexOf(input) > -1).map((topic, topicIndex) => {
                                         return (
-                                            <Row className="mb-1" key={topicIndex}>
-                                                <div className="card mb-4 wow fadeIn" data-wow-delay={`0.${topicIndex + 1}s`} style={{ minWidth: "100%" }}>
+                                            <Row className="mb-3" key={topicIndex}>
+                                                <div className="card mb-5 wow fadeIn" data-wow-delay={`0.${topicIndex + 1}s`} style={{ minWidth: "100%" }}>
                                                     <div className="row no-gutters ">
                                                         <div className="col-md-5">
                                                             <div className="clear p-4">

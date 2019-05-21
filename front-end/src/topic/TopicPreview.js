@@ -130,13 +130,11 @@ class TopicPreview extends Component {
                     <React.Fragment>
                         {resolved && (
                             <div>
-                                <PageHeader title="Details" bg={topic.imageUrl}>
+                                <PageHeader title={topic.title} bg={topic.imageUrl} intro="Tip: a topic is just a start. It is in your own hands to master a topic. If you have another perspective, share it!">
                                     <Link to={`/explore`} className="breadcrumbLink">
                                         <span>Explore</span>
                                     </Link>
                                 </PageHeader>
-
-
 
                                 <div className="bg-alt sectionPadding text-left">
                                     <div className="container">

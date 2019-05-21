@@ -25,11 +25,11 @@ export class PathNavigator extends Component {
                             <ListGroup.Item key={contentId} action eventKey={content.id}>
                                 {linkable ? (
                                     <Link className="font-white" to={`/content/view/${content.id}`}>
-                                        {contentId + 1} - {content.title} <FontAwesomeIcon icon={faChevronRight} />
+                                        {contentId + 1} - {content.title.substr(0, 20)}... <FontAwesomeIcon icon={faChevronRight} />
                                     </Link>
                                 ) : (
                                         <span>
-                                            {contentId + 1} - {content.title} <FontAwesomeIcon icon={faChevronRight} />
+                                            {contentId + 1} - {content.title.substr(0, 20)}... <FontAwesomeIcon icon={faChevronRight} />
                                         </span>
                                     )}
 
