@@ -1,15 +1,45 @@
-package com.tallrye.wlearn.service;
+package com.tallrye.wlearn.service.implementation;
 
-import com.tallrye.wlearn.controller.dto.response.UserIdentityAvailability;
-import com.tallrye.wlearn.controller.dto.response.UserProfile;
-import com.tallrye.wlearn.controller.dto.response.UserSummary;
+import com.tallrye.wlearn.dto.UserIdentityAvailabilityDto;
+import com.tallrye.wlearn.dto.UserProfileDto;
+import com.tallrye.wlearn.dto.UserSummaryDto;
+import com.tallrye.wlearn.exception.ResourceNotFoundException;
+import com.tallrye.wlearn.persistence.TopicRepository;
+import com.tallrye.wlearn.persistence.UserRepository;
+import com.tallrye.wlearn.entity.UserEntity;
 import com.tallrye.wlearn.security.UserPrincipal;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
+@Slf4j
+@Service
+public class UserServiceImpl {
 
-    UserSummary getCurrentUser(UserPrincipal currentUser);
 
-    UserIdentityAvailability checkUsernameAvailability(String email);
+    private UserRepository userRepository;
 
-    UserProfile getUserProfile(String username);
+    private TopicRepository topicRepository;
+
+    public UserServiceImpl(UserRepository userRepository, TopicRepository topicRepository) {
+        this.userRepository = userRepository;
+        this.topicRepository = topicRepository;
+    }
+    
+    public UserSummaryDto getCurrentUser(UserPrincipal currentUser) {
+        return new UserSummaryDto(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
+    }
+    
+    public UserIdentityAvailabilityDto checkUsernameAvailability(String email) {
+        return new UserIdentityAvailabilityDto(!userRepository.existsByEmail(email));
+    }
+    
+    public UserProfileDto getUserProfile(String username) {
+        final UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("UserEntity", "username", username));
+
+        final long topicCount = topicRepository.countByCreatedBy(userEntity.getId());
+
+        return new UserProfileDto(userEntity.getId(), userEntity.getUsername(), userEntity.getName(), userEntity.getCreatedAt(),
+                topicCount);
+    }
 }

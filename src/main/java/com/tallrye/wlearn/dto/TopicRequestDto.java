@@ -1,0 +1,47 @@
+package com.tallrye.wlearn.controller.dto.request;
+
+import com.tallrye.wlearn.entity.ContentEntity;
+import com.tallrye.wlearn.entity.UserEntity;
+import com.tallrye.wlearn.entity.WikiDataEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Set;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class TopicRequest {
+
+
+    private Long id = 0L;
+
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String description;
+    
+    private String createdByName;
+
+    @NotBlank
+    private String imageUrl;
+
+    @Nullable
+    private Set<WikiDataEntity> wikiDatumEntities;
+
+    @Nullable
+    private Set<UserEntity> enrolledUserEntities;
+
+    @Nullable
+    private List<ContentEntity> contentEntityList;
+
+}
