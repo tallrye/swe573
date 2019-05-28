@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.service.implementation;
+package com.tallrye.wlearn.service;
 
 
 import com.tallrye.wlearn.dto.EnrollmentRequestDto;
@@ -9,13 +9,12 @@ import com.tallrye.wlearn.dto.TopicResponseDto;
 import com.tallrye.wlearn.entity.TopicEntity;
 import com.tallrye.wlearn.exception.NotValidTopicException;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.TopicRepository;
-import com.tallrye.wlearn.persistence.UserRepository;
-import com.tallrye.wlearn.persistence.WikiDataRepository;
+import com.tallrye.wlearn.repository.TopicRepository;
+import com.tallrye.wlearn.repository.UserRepository;
+import com.tallrye.wlearn.repository.WikiDataRepository;
 import com.tallrye.wlearn.entity.UserEntity;
 import com.tallrye.wlearn.entity.WikiDataEntity;
 import com.tallrye.wlearn.security.UserPrincipal;
-import com.tallrye.wlearn.service.util.WlearnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class TopicServiceImpl {
+public class TopicService {
 
     private static final String TOPIC = "TopicEntity";
 
@@ -38,8 +37,8 @@ public class TopicServiceImpl {
 
     private ConfigurableConversionService smepConversionService;
 
-    public TopicServiceImpl(TopicRepository topicRepository, UserRepository userRepository,
-            WikiDataRepository wikiDataRepository, ConfigurableConversionService smepConversionService) {
+    public TopicService(TopicRepository topicRepository, UserRepository userRepository,
+                        WikiDataRepository wikiDataRepository, ConfigurableConversionService smepConversionService) {
         this.topicRepository = topicRepository;
         this.userRepository = userRepository;
         this.smepConversionService = smepConversionService;

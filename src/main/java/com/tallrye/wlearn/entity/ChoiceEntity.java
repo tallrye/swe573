@@ -1,30 +1,30 @@
-package com.tallrye.wlearn.persistence.entity;
+package com.tallrye.wlearn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.Instant;
 
 @Entity
 @Table(name = "choices")
+@JsonIgnoreProperties(
+        value = {"createdBy", "createdAt", "updatedAt"},
+        allowGetters = true
+)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChoiceEntity extends UserCreatedDataBaseEntity{
+public class ChoiceEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +39,18 @@ public class ChoiceEntity extends UserCreatedDataBaseEntity{
 
     @JsonIgnore
     @ManyToOne
-    private Question question;
+    private QuestionEntity questionEntity;
+
+    @CreatedBy
+    @Column(updatable = false)
+    private Long createdBy;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Instant updatedAt;
 
 }

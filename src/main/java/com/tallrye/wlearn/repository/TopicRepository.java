@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.persistence;
+package com.tallrye.wlearn.repository;
 
 import com.tallrye.wlearn.entity.TopicEntity;
 import com.tallrye.wlearn.entity.UserEntity;

@@ -186,6 +186,7 @@ a:hover{
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    background-attachment: fixed;
     font-size: 18px;
     position: relative;
     z-index: 0;
@@ -263,7 +264,7 @@ a:hover{
 /* .list-group-item:after{
     height: 20px;
     display: block;
-    content: "";
+    contentEntity: "";
     position: absolute;
     bottom: -20px;
     left: 20%;

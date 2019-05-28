@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.request;
+package com.tallrye.wlearn.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnrollmentRequest {
+public class EnrollmentRequestDto {
 
     @NonNull
     private Long topicId;

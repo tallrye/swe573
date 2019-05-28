@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.request;
+package com.tallrye.wlearn.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
+public class LoginRequestDto {
 
     @NotBlank
     private String usernameOrEmail;

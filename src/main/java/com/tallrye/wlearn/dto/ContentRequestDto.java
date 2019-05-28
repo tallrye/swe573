@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.request;
+package com.tallrye.wlearn.dto;
 
 import lombok.*;
 import org.springframework.lang.NonNull;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContentRequest {
+public class ContentRequestDto {
 
     @NonNull
     private Long id = 0L;

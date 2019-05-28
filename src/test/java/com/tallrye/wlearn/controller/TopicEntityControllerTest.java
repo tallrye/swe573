@@ -1,8 +1,8 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.request.EnrollmentRequest;
-import com.tallrye.wlearn.controller.dto.request.PublishRequest;
-import com.tallrye.wlearn.controller.dto.request.TopicRequest;
+import com.tallrye.wlearn.dto.EnrollmentRequestDto;
+import com.tallrye.wlearn.dto.PublishRequestDto;
+import com.tallrye.wlearn.dto.TopicRequestDto;
 import com.tallrye.wlearn.service.TopicService;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class TopicControllerTest extends AbstractEntityControllerTest {
+public class TopicEntityControllerTest extends AbstractEntityControllerTest {
 
     @Mock
     private TopicService topicService;
@@ -23,7 +23,7 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     private final TopicController sut = new TopicController(topicService);
 
     @Test
-    public void testGetAllTopics() {
+    public void getAllTopics() {
         //Test
         sut.getAllTopics(currentUser);
         //Verify
@@ -32,7 +32,7 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
 
 
     @Test
-    public void testGetTopicsByUsername() {
+    public void getTopicsByUser() {
         //Test
         sut.getTopicsByUsername("someName", currentUser);
         //Verify
@@ -40,7 +40,7 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testGetTopicsById() {
+    public void getTopic() {
         //Test
         sut.getTopic(currentUser, 0L);
         //Verify
@@ -48,10 +48,10 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testCreateTopic() {
+    public void createTopic() {
         //Prepare
-        final TopicRequest request = TopicRequest.builder().contentList(new ArrayList<>()).description("description")
-                .id(0L).imageUrl("someUrl").title("title").wikiData(new HashSet<>()).build();
+        final TopicRequestDto request = TopicRequestDto.builder().contentEntityList(new ArrayList<>()).description("description")
+                .id(0L).imageUrl("someUrl").title("title").wikiDatumEntities(new HashSet<>()).build();
         //Test
         sut.createTopic(currentUser, request);
         //Verify
@@ -59,9 +59,9 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testPublishStatusUpdate() {
+    public void changeStatus() {
         //Prepare
-        final PublishRequest request = PublishRequest.builder().publish(true).topicId(0L).build();
+        final PublishRequestDto request = PublishRequestDto.builder().publish(true).topicId(0L).build();
         //Test
         sut.changeStatus(currentUser, request);
         //Verify
@@ -69,7 +69,7 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testDeleteTopicById() {
+    public void deleteTopic() {
         //Test
         sut.deleteTopic(currentUser, 0L);
         //Verify
@@ -77,9 +77,9 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testEnrollToTopicByUsername() {
+    public void enroll() {
         //Prepare
-        final EnrollmentRequest request = EnrollmentRequest.builder().topicId(0L).username("username").build();
+        final EnrollmentRequestDto request = EnrollmentRequestDto.builder().topicId(0L).username("username").build();
         //Test
         sut.enroll(currentUser, request);
         //Verify
@@ -87,7 +87,7 @@ public class TopicControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testGetEnrolledTopics() {
+    public void getEnrolledTopics() {
         //Test
         sut.getEnrolledTopics(currentUser, 0L);
         //Verify

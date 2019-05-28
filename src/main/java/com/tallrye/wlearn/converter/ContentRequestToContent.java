@@ -1,22 +1,22 @@
 package com.tallrye.wlearn.converter;
 
-import com.tallrye.wlearn.controller.dto.request.ContentRequest;
-import com.tallrye.wlearn.persistence.model.Content;
+import com.tallrye.wlearn.dto.ContentRequestDto;
+import com.tallrye.wlearn.entity.ContentEntity;
 import org.springframework.core.convert.converter.Converter;
 
-public class ContentRequestToContent implements Converter<ContentRequest, Content> {
+public class ContentRequestToContent implements Converter<ContentRequestDto, ContentEntity> {
 
     @Override
-    public Content convert(ContentRequest source) {
-        final Content content = Content.builder()
+    public ContentEntity convert(ContentRequestDto source) {
+        final ContentEntity contentEntity = ContentEntity.builder()
                 .title(source.getTitle())
                 .text(source.getText())
                 .build();
 
         if (source.getId() != 0L) {
-            content.setId(source.getId());
+            contentEntity.setId(source.getId());
         }
 
-        return content;
+        return contentEntity;
     }
 }

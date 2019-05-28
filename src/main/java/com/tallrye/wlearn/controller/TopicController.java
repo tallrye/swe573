@@ -1,10 +1,6 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.request.EnrollmentRequest;
-import com.tallrye.wlearn.controller.dto.request.PublishRequest;
-import com.tallrye.wlearn.controller.dto.request.TopicRequest;
-import com.tallrye.wlearn.controller.dto.response.ApiResponse;
-import com.tallrye.wlearn.controller.dto.response.TopicResponse;
+import com.tallrye.wlearn.dto.*;
 import com.tallrye.wlearn.security.CurrentUser;
 import com.tallrye.wlearn.security.UserPrincipal;
 import com.tallrye.wlearn.service.TopicService;
@@ -29,56 +25,56 @@ public class TopicController {
 
     @Transactional
     @GetMapping
-    public ResponseEntity<List<TopicResponse>> getAllTopics(@CurrentUser UserPrincipal currentUser) {
+    public ResponseEntity<List<TopicResponseDto>> getAllTopics(@CurrentUser UserPrincipal currentUser) {
         return topicService.getAllTopics(currentUser);
     }
 
     @Transactional
     @GetMapping(value = "/{username}")
-    public ResponseEntity<List<TopicResponse>> getTopicsByUsername(@PathVariable String username,
-            @CurrentUser UserPrincipal currentUser) {
+    public ResponseEntity<List<TopicResponseDto>> getTopicsByUsername(@PathVariable String username,
+                                                                      @CurrentUser UserPrincipal currentUser) {
         return topicService.getTopicsCreatedBy(username, currentUser);
     }
 
     @Transactional
     @GetMapping(value = "/topic/{topicId}")
-    public ResponseEntity<TopicResponse> getTopicById(@CurrentUser UserPrincipal currentUser,
-            @PathVariable Long topicId) {
+    public ResponseEntity<TopicResponseDto> getTopic(@CurrentUser UserPrincipal currentUser,
+                                                     @PathVariable Long topicId) {
         return topicService.getTopicById(topicId, currentUser);
     }
 
     @Transactional
     @PostMapping(value = "/publish")
-    public ResponseEntity<ApiResponse> publishStatusUpdate(@CurrentUser UserPrincipal currentUser,
-                                                           @RequestBody PublishRequest publishRequest) {
-        return topicService.publishStatusUpdate(currentUser, publishRequest);
+    public ResponseEntity<ApiResponseDto> changeStatus(@CurrentUser UserPrincipal currentUser,
+                                                       @RequestBody PublishRequestDto publishRequestDto) {
+        return topicService.publishStatusUpdate(currentUser, publishRequestDto);
     }
 
     @Transactional
     @PostMapping
-    public ResponseEntity<TopicResponse> createTopic(@CurrentUser UserPrincipal currentUser,
-            @Valid @RequestBody TopicRequest topicRequest) {
-        return topicService.createTopic(currentUser, topicRequest);
+    public ResponseEntity<TopicResponseDto> createTopic(@CurrentUser UserPrincipal currentUser,
+                                                        @Valid @RequestBody TopicRequestDto topicRequestDto) {
+        return topicService.createTopic(currentUser, topicRequestDto);
     }
 
     @Transactional
     @DeleteMapping(value = "/topic/{topicId}")
-    public ResponseEntity<ApiResponse> deleteTopicById(@CurrentUser UserPrincipal currentUser,
-            @PathVariable Long topicId) {
+    public ResponseEntity<ApiResponseDto> deleteTopic(@CurrentUser UserPrincipal currentUser,
+                                                      @PathVariable Long topicId) {
         return topicService.deleteTopicById(topicId, currentUser);
     }
 
     @Transactional
     @PostMapping("/enroll")
-    public ResponseEntity<ApiResponse> enrollToTopicByUsername(@CurrentUser UserPrincipal currentUser,
-            @RequestBody EnrollmentRequest enrollmentRequest) {
-        return topicService.enrollToTopicByUsername(currentUser, enrollmentRequest);
+    public ResponseEntity<ApiResponseDto> enroll(@CurrentUser UserPrincipal currentUser,
+                                                 @RequestBody EnrollmentRequestDto enrollmentRequestDto) {
+        return topicService.enrollToTopicByUsername(currentUser, enrollmentRequestDto);
     }
 
     @Transactional
     @GetMapping("/enrolled/{userId}")
-    public ResponseEntity<List<TopicResponse>> getEnrolledTopics(@CurrentUser UserPrincipal currentUser,
-            @PathVariable Long userId) {
+    public ResponseEntity<List<TopicResponseDto>> getEnrolledTopics(@CurrentUser UserPrincipal currentUser,
+                                                                    @PathVariable Long userId) {
         return topicService.getTopicsByEnrolledUserId(currentUser, userId);
     }
 }

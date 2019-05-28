@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.request;
+package com.tallrye.wlearn.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.lang.NonNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnswerRequest {
+public class AnswerRequestDto {
 
     @NonNull
     private Long questionId;

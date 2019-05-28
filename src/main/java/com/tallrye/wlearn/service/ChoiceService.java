@@ -1,14 +1,13 @@
-package com.tallrye.wlearn.service.implementation;
+package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.dto.ChoiceRequestDto;
 import com.tallrye.wlearn.dto.ApiResponseDto;
 import com.tallrye.wlearn.entity.QuestionEntity;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.ChoiceRepository;
-import com.tallrye.wlearn.persistence.QuestionRepository;
+import com.tallrye.wlearn.repository.ChoiceRepository;
+import com.tallrye.wlearn.repository.QuestionRepository;
 import com.tallrye.wlearn.entity.ChoiceEntity;
 import com.tallrye.wlearn.security.UserPrincipal;
-import com.tallrye.wlearn.service.util.WlearnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.http.ResponseEntity;

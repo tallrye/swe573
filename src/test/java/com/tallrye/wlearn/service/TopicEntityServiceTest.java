@@ -1,22 +1,21 @@
 package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.TestUtils;
-import com.tallrye.wlearn.controller.dto.request.EnrollmentRequest;
-import com.tallrye.wlearn.controller.dto.request.PublishRequest;
-import com.tallrye.wlearn.controller.dto.request.TopicRequest;
-import com.tallrye.wlearn.controller.dto.response.ApiResponse;
-import com.tallrye.wlearn.controller.dto.response.TopicResponse;
+import com.tallrye.wlearn.dto.EnrollmentRequestDto;
+import com.tallrye.wlearn.dto.PublishRequestDto;
+import com.tallrye.wlearn.dto.TopicRequestDto;
+import com.tallrye.wlearn.dto.ApiResponseDto;
+import com.tallrye.wlearn.dto.TopicResponseDto;
+import com.tallrye.wlearn.entity.ContentEntity;
+import com.tallrye.wlearn.entity.TopicEntity;
 import com.tallrye.wlearn.exception.CreatedByException;
 import com.tallrye.wlearn.exception.NotValidTopicException;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.TopicRepository;
-import com.tallrye.wlearn.persistence.UserRepository;
-import com.tallrye.wlearn.persistence.WikiDataRepository;
-import com.tallrye.wlearn.entity.Content;
-import com.tallrye.wlearn.entity.Question;
-import com.tallrye.wlearn.entity.Topic;
-import com.tallrye.wlearn.entity.User;
-import com.tallrye.wlearn.service.implementation.TopicServiceImpl;
+import com.tallrye.wlearn.repository.TopicRepository;
+import com.tallrye.wlearn.repository.UserRepository;
+import com.tallrye.wlearn.repository.WikiDataRepository;
+import com.tallrye.wlearn.entity.QuestionEntity;
+import com.tallrye.wlearn.entity.UserEntity;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,7 +32,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-public class TopicServiceTest extends AbstractServiceTest {
+public class TopicEntityServiceTest extends AbstractServiceTest {
 
     @Mock
     private TopicRepository topicRepository;
@@ -48,24 +47,24 @@ public class TopicServiceTest extends AbstractServiceTest {
     private ConfigurableConversionService smepConversionService;
 
     @InjectMocks
-    private final TopicService sut = new TopicServiceImpl(topicRepository, userRepository, wikiDataRepository,
+    private final TopicService sut = new TopicService(topicRepository, userRepository, wikiDataRepository,
             smepConversionService);
 
     @Test
-    public void testGetAllTopics() {
+    public void getAllTopics() {
         //Prepare
-        final List<Topic> topicList = TestUtils.createDummyTopicList();
-        when(topicRepository.findByPublished(true)).thenReturn(topicList);
-        when(smepConversionService.convert(topicList.get(0), TopicResponse.class))
+        final List<TopicEntity> topicEntityList = TestUtils.createDummyTopicList();
+        when(topicRepository.findByPublished(true)).thenReturn(topicEntityList);
+        when(smepConversionService.convert(topicEntityList.get(0), TopicResponseDto.class))
                 .thenReturn(TestUtils.createDummyTopicResponse());
         //Test
-        final ResponseEntity<List<TopicResponse>> responseEntity = sut.getAllTopics(currentUser);
+        final ResponseEntity<List<TopicResponseDto>> responseEntity = sut.getAllTopics(currentUser);
         //Verify
         assertTrue(Objects.requireNonNull(responseEntity.getBody()).size() > 0);
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetTopicsCreatedBy_UserNotFound() {
+    public void getTopicsCreatedBy_UserNotFound() {
         //Prepare
         when(userRepository.findByUsername("username")).thenReturn(Optional.empty());
         //Test
@@ -73,22 +72,22 @@ public class TopicServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testGetTopicsCreatedBy_Success() {
+    public void getTopicsCreatedBy_Success() {
         //Prepare
-        final User user = TestUtils.createDummyUser();
-        final List<Topic> topicList = TestUtils.createDummyTopicList();
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
-        when(topicRepository.findByCreatedBy(user.getId())).thenReturn(topicList);
-        when(smepConversionService.convert(topicList.get(0), TopicResponse.class))
+        final UserEntity userEntity = TestUtils.createDummyUser();
+        final List<TopicEntity> topicEntityList = TestUtils.createDummyTopicList();
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(userEntity));
+        when(topicRepository.findByCreatedBy(userEntity.getId())).thenReturn(topicEntityList);
+        when(smepConversionService.convert(topicEntityList.get(0), TopicResponseDto.class))
                 .thenReturn(TestUtils.createDummyTopicResponse());
         //Test
-        final ResponseEntity<List<TopicResponse>> responseEntity = sut.getTopicsCreatedBy("username", currentUser);
+        final ResponseEntity<List<TopicResponseDto>> responseEntity = sut.getTopicsCreatedBy("username", currentUser);
         //Verify
         assertTrue(Objects.requireNonNull(responseEntity.getBody()).size() > 0);
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetTopicById_TopicNotFound() {
+    public void getTopic_ResourceNotFound() {
         //Prepare
         when(topicRepository.findById(0L)).thenReturn(Optional.empty());
         //Test
@@ -96,93 +95,93 @@ public class TopicServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testGetTopicById_Success() {
+    public void getTopic_Success() {
         //Prepare
-        final Topic topic = TestUtils.createDummyTopic();
-        when(topicRepository.findById(0L)).thenReturn(Optional.of(topic));
-        when(smepConversionService.convert(topic, TopicResponse.class))
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        when(topicRepository.findById(0L)).thenReturn(Optional.of(topicEntity));
+        when(smepConversionService.convert(topicEntity, TopicResponseDto.class))
                 .thenReturn(TestUtils.createDummyTopicResponse());
         //Test
-        final ResponseEntity<TopicResponse> responseEntity = sut.getTopicById(0L, currentUser);
+        final ResponseEntity<TopicResponseDto> responseEntity = sut.getTopicById(0L, currentUser);
         //Verify
         assertNotNull(responseEntity.getBody());
     }
 
     @Test
-    public void testCreateTopic() {
+    public void createTopic_Success() {
         //Prepare
-        final TopicRequest topicRequest = TestUtils.createDummyTopicRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        final TopicResponse topicResponse = TestUtils.createDummyTopicResponse();
-        when(topicRepository.findById(topicRequest.getId())).thenReturn(Optional.of(topic));
-        when(smepConversionService.convert(topicRequest, Topic.class)).thenReturn(topic);
-        when(topicRepository.save(topic)).thenReturn(topic);
-        when(smepConversionService.convert(topic, TopicResponse.class)).thenReturn(topicResponse);
+        final TopicRequestDto topicRequestDto = TestUtils.createDummyTopicRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        final TopicResponseDto topicResponseDto = TestUtils.createDummyTopicResponse();
+        when(topicRepository.findById(topicRequestDto.getId())).thenReturn(Optional.of(topicEntity));
+        when(smepConversionService.convert(topicRequestDto, TopicEntity.class)).thenReturn(topicEntity);
+        when(topicRepository.save(topicEntity)).thenReturn(topicEntity);
+        when(smepConversionService.convert(topicEntity, TopicResponseDto.class)).thenReturn(topicResponseDto);
         //Test
-        final ResponseEntity<TopicResponse> responseEntity = sut.createTopic(currentUser, topicRequest);
+        final ResponseEntity<TopicResponseDto> responseEntity = sut.createTopic(currentUser, topicRequestDto);
         //Verify
         assertNotNull(responseEntity.getBody());
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testpublishStatusUpdate_TopicNotFound() {
+    public void publishStatusUpdate_TopicNotFound() {
         //Prepare
-        final PublishRequest publishRequest = TestUtils.createDummyPublishRequest();
-        when(topicRepository.findById(publishRequest.getTopicId())).thenReturn(Optional.empty());
+        final PublishRequestDto publishRequestDto = TestUtils.createDummyPublishRequest();
+        when(topicRepository.findById(publishRequestDto.getTopicId())).thenReturn(Optional.empty());
         //Test
-        sut.publishStatusUpdate(currentUser, publishRequest);
+        sut.publishStatusUpdate(currentUser, publishRequestDto);
     }
 
     @Test(expected = CreatedByException.class)
-    public void testPublishStatusUpdate_CreateByFail() {
+    public void changeStatus_CreateBy() {
         //Prepare
-        final PublishRequest publishRequest = TestUtils.createDummyPublishRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        topic.setCreatedBy(1L);
-        when(topicRepository.findById(publishRequest.getTopicId())).thenReturn(Optional.of(topic));
+        final PublishRequestDto publishRequestDto = TestUtils.createDummyPublishRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        topicEntity.setCreatedBy(1L);
+        when(topicRepository.findById(publishRequestDto.getTopicId())).thenReturn(Optional.of(topicEntity));
         //Test
-        sut.publishStatusUpdate(currentUser, publishRequest);
+        sut.publishStatusUpdate(currentUser, publishRequestDto);
     }
 
     @Test(expected = NotValidTopicException.class)
-    public void testPublishStatusUpdate_NotValidTopic_NullOrEmptyContentList() {
+    public void changeStatus_NotValidTopic_NullOrEmptyContentList() {
         //Prepare
-        final PublishRequest publishRequest = TestUtils.createDummyPublishRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        topic.setContentList(null);
-        topic.setCreatedBy(currentUser.getId());
-        when(topicRepository.findById(publishRequest.getTopicId())).thenReturn(Optional.of(topic));
+        final PublishRequestDto publishRequestDto = TestUtils.createDummyPublishRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        topicEntity.setContentEntityList(null);
+        topicEntity.setCreatedBy(currentUser.getId());
+        when(topicRepository.findById(publishRequestDto.getTopicId())).thenReturn(Optional.of(topicEntity));
         //Test
-        sut.publishStatusUpdate(currentUser, publishRequest);
+        sut.publishStatusUpdate(currentUser, publishRequestDto);
     }
 
     @Test(expected = NotValidTopicException.class)
-    public void testPublishStatusUpdate_NotValidTopic_NullOrEmptyQuestionList() {
+    public void changeStatus_NotValidTopic_NullOrEmptyQuestionList() {
         //Prepare
-        final PublishRequest publishRequest = TestUtils.createDummyPublishRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        final List<Content> contentList = TestUtils.createDummyContentList();
-        contentList.get(0).setQuestionList(null);
-        topic.setContentList(contentList);
-        topic.setCreatedBy(currentUser.getId());
-        when(topicRepository.findById(publishRequest.getTopicId())).thenReturn(Optional.of(topic));
+        final PublishRequestDto publishRequestDto = TestUtils.createDummyPublishRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        final List<ContentEntity> contentEntityList = TestUtils.createDummyContentList();
+        contentEntityList.get(0).setQuestionEntityList(null);
+        topicEntity.setContentEntityList(contentEntityList);
+        topicEntity.setCreatedBy(currentUser.getId());
+        when(topicRepository.findById(publishRequestDto.getTopicId())).thenReturn(Optional.of(topicEntity));
         //Test
-        sut.publishStatusUpdate(currentUser, publishRequest);
+        sut.publishStatusUpdate(currentUser, publishRequestDto);
     }
 
     @Test
-    public void testPublishStatusUpdate_Success() {
+    public void changeStatus_Success() {
         //Prepare
-        final PublishRequest publishRequest = TestUtils.createDummyPublishRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        final List<Content> contentList = TestUtils.createDummyContentList();
-        final List<Question> questionList = TestUtils.createDummyQuetionList();
-        contentList.get(0).setQuestionList(questionList);
-        topic.setContentList(contentList);
-        topic.setCreatedBy(currentUser.getId());
-        when(topicRepository.findById(publishRequest.getTopicId())).thenReturn(Optional.of(topic));
+        final PublishRequestDto publishRequestDto = TestUtils.createDummyPublishRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        final List<ContentEntity> contentEntityList = TestUtils.createDummyContentList();
+        final List<QuestionEntity> questionEntityList = TestUtils.createDummyQuetionList();
+        contentEntityList.get(0).setQuestionEntityList(questionEntityList);
+        topicEntity.setContentEntityList(contentEntityList);
+        topicEntity.setCreatedBy(currentUser.getId());
+        when(topicRepository.findById(publishRequestDto.getTopicId())).thenReturn(Optional.of(topicEntity));
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.publishStatusUpdate(currentUser, publishRequest);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.publishStatusUpdate(currentUser, publishRequestDto);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody().getSuccess(), true);
@@ -190,7 +189,7 @@ public class TopicServiceTest extends AbstractServiceTest {
 
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testDeleteByTopicId_TopicNotFound() {
+    public void deleteTopic_TopicNotFound() {
         //Prepare
         when(topicRepository.findById(0L)).thenReturn(Optional.empty());
         //Test
@@ -198,58 +197,58 @@ public class TopicServiceTest extends AbstractServiceTest {
     }
 
     @Test(expected = CreatedByException.class)
-    public void testDeleteByTopicId_CreateByFail() {
+    public void deleteTopic_CreateBy() {
         //Prepare
-        final Topic topic = TestUtils.createDummyTopic();
-        topic.setCreatedBy(1L);
-        when(topicRepository.findById(0L)).thenReturn(Optional.of(topic));
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        topicEntity.setCreatedBy(1L);
+        when(topicRepository.findById(0L)).thenReturn(Optional.of(topicEntity));
         //Test
         sut.deleteTopicById(0L, currentUser);
     }
 
     @Test
-    public void testDeleteByTopicId_Success() {
+    public void deleteTopic_Success() {
         //Prepare
-        final Topic topic = TestUtils.createDummyTopic();
-        topic.setCreatedBy(currentUser.getId());
-        when(topicRepository.findById(topic.getId())).thenReturn(Optional.of(topic));
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        topicEntity.setCreatedBy(currentUser.getId());
+        when(topicRepository.findById(topicEntity.getId())).thenReturn(Optional.of(topicEntity));
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.deleteTopicById(0L, currentUser);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.deleteTopicById(0L, currentUser);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody().getSuccess(), true);
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testEnrollToTopicByUsername_TopicNotFound() {
+    public void enroll_TopicResourceNotFound() {
         //Prepare
-        final EnrollmentRequest enrollmentRequest = TestUtils.createDummyEnrollmentRequest();
-        when(topicRepository.findById(enrollmentRequest.getTopicId())).thenReturn(Optional.empty());
+        final EnrollmentRequestDto enrollmentRequestDto = TestUtils.createDummyEnrollmentRequest();
+        when(topicRepository.findById(enrollmentRequestDto.getTopicId())).thenReturn(Optional.empty());
         //Test
-        sut.enrollToTopicByUsername(currentUser, enrollmentRequest);
+        sut.enrollToTopicByUsername(currentUser, enrollmentRequestDto);
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testEnrollToTopicByUsername_UserNotFound() {
+    public void enroll_ResourceNotFound() {
         //Prepare
-        final EnrollmentRequest enrollmentRequest = TestUtils.createDummyEnrollmentRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        when(topicRepository.findById(enrollmentRequest.getTopicId())).thenReturn(Optional.of(topic));
-        when(userRepository.findByUsername(enrollmentRequest.getUsername())).thenReturn(Optional.empty());
+        final EnrollmentRequestDto enrollmentRequestDto = TestUtils.createDummyEnrollmentRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        when(topicRepository.findById(enrollmentRequestDto.getTopicId())).thenReturn(Optional.of(topicEntity));
+        when(userRepository.findByUsername(enrollmentRequestDto.getUsername())).thenReturn(Optional.empty());
         //Test
-        sut.enrollToTopicByUsername(currentUser, enrollmentRequest);
+        sut.enrollToTopicByUsername(currentUser, enrollmentRequestDto);
     }
 
     @Test
-    public void testEnrollToTopicByUsername_Success() {
+    public void enroll_Success() {
         //Prepare
-        final EnrollmentRequest enrollmentRequest = TestUtils.createDummyEnrollmentRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        final User user = TestUtils.createDummyUser();
-        when(topicRepository.findById(enrollmentRequest.getTopicId())).thenReturn(Optional.of(topic));
-        when(userRepository.findByUsername(enrollmentRequest.getUsername())).thenReturn(Optional.of(user));
+        final EnrollmentRequestDto enrollmentRequestDto = TestUtils.createDummyEnrollmentRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        final UserEntity userEntity = TestUtils.createDummyUser();
+        when(topicRepository.findById(enrollmentRequestDto.getTopicId())).thenReturn(Optional.of(topicEntity));
+        when(userRepository.findByUsername(enrollmentRequestDto.getUsername())).thenReturn(Optional.of(userEntity));
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.enrollToTopicByUsername(currentUser, enrollmentRequest);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.enrollToTopicByUsername(currentUser, enrollmentRequestDto);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody().getSuccess(), true);
@@ -257,7 +256,7 @@ public class TopicServiceTest extends AbstractServiceTest {
 
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetTopicsByEnrolledUserId_UserNotFound() {
+    public void getTopicsByUser_ResourceNotFound() {
         //Prepare
         when(userRepository.findById(0L)).thenReturn(Optional.empty());
         //Test
@@ -265,16 +264,16 @@ public class TopicServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testGetTopicsByEnrolledUserId() {
+    public void getTopicsByUser() {
         //Prepare
-        final User user = TestUtils.createDummyUser();
-        final List<Topic> enrolledTopics = TestUtils.createDummyTopicList();
-        final TopicResponse topicResponse = TestUtils.createDummyTopicResponse();
-        when(userRepository.findById(0L)).thenReturn(Optional.of(user));
-        when(topicRepository.findTopicByEnrolledUsersContainsAndPublished(user, true)).thenReturn(enrolledTopics);
-        when(smepConversionService.convert(enrolledTopics.get(0), TopicResponse.class)).thenReturn(topicResponse);
+        final UserEntity userEntity = TestUtils.createDummyUser();
+        final List<TopicEntity> enrolledTopicEntities = TestUtils.createDummyTopicList();
+        final TopicResponseDto topicResponseDto = TestUtils.createDummyTopicResponse();
+        when(userRepository.findById(0L)).thenReturn(Optional.of(userEntity));
+        when(topicRepository.findTopicByEnrolledUsersContainsAndPublished(userEntity, true)).thenReturn(enrolledTopicEntities);
+        when(smepConversionService.convert(enrolledTopicEntities.get(0), TopicResponseDto.class)).thenReturn(topicResponseDto);
         //Test
-        final ResponseEntity<List<TopicResponse>> responseEntity = sut.getTopicsByEnrolledUserId(currentUser, 0L);
+        final ResponseEntity<List<TopicResponseDto>> responseEntity = sut.getTopicsByEnrolledUserId(currentUser, 0L);
         //Verify
         assertTrue(Objects.requireNonNull(responseEntity.getBody()).size() > 0);
     }

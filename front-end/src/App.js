@@ -153,7 +153,7 @@ class App extends Component {
 
                                 <PrivateRoute
                                     authenticated={this.state.isAuthenticated}
-                                    path="/topic/new"
+                                    path="/topicEntity/new"
                                     exact={true}
                                     currentUser={this.state.currentUser}
                                     component={CreateTopic}
@@ -161,7 +161,7 @@ class App extends Component {
 
                                 <PrivateRoute
                                     authenticated={this.state.isAuthenticated}
-                                    path="/topic/:topicId/edit"
+                                    path="/topicEntity/:topicId/edit"
                                     exact={true}
                                     currentUser={this.state.currentUser}
                                     component={EditTopic}
@@ -170,7 +170,7 @@ class App extends Component {
                                 <PrivateRoute
                                     authenticated={this.state.isAuthenticated}
                                     currentUser={this.state.currentUser}
-                                    path="/topic/:topicId/content"
+                                    path="/topicEntity/:topicId/content"
                                     exact={true}
                                     component={AddContent}
                                 ></PrivateRoute>
@@ -201,7 +201,7 @@ class App extends Component {
                                 <PrivateRoute
                                     authenticated={this.state.isAuthenticated}
                                     currentUser={this.state.currentUser}
-                                    path="/topic/:topicId"
+                                    path="/topicEntity/:topicId"
                                     exact={true}
                                     component={Topic}
                                     editable={true}
@@ -209,7 +209,7 @@ class App extends Component {
 
                                 <PrivateRoute
                                     authenticated={this.state.isAuthenticated}
-                                    path="/topic/view/:topicId"
+                                    path="/topicEntity/view/:topicId"
                                     exact={true}
                                     currentUser={this.state.currentUser}
                                     component={Topic}
@@ -217,7 +217,7 @@ class App extends Component {
                                 ></PrivateRoute>
 
                                 <PrivateRoute
-                                    path="/topic/preview/:topicId"
+                                    path="/topicEntity/preview/:topicId"
                                     exact={true}
                                     authenticated={this.state.isAuthenticated}
                                     currentUser={this.state.currentUser}

@@ -1,23 +1,7 @@
 package com.tallrye.wlearn;
 
-import com.tallrye.wlearn.controller.dto.request.AnswerRequest;
-import com.tallrye.wlearn.controller.dto.request.ChoiceRequest;
-import com.tallrye.wlearn.controller.dto.request.ContentRequest;
-import com.tallrye.wlearn.controller.dto.request.EnrollmentRequest;
-import com.tallrye.wlearn.controller.dto.request.LoginRequest;
-import com.tallrye.wlearn.controller.dto.request.PublishRequest;
-import com.tallrye.wlearn.controller.dto.request.QuestionRequest;
-import com.tallrye.wlearn.controller.dto.request.SignUpRequest;
-import com.tallrye.wlearn.controller.dto.request.TopicRequest;
-import com.tallrye.wlearn.controller.dto.response.ContentResponse;
-import com.tallrye.wlearn.controller.dto.response.TopicResponse;
-import com.tallrye.wlearn.persistence.model.Choice;
-import com.tallrye.wlearn.persistence.model.Content;
-import com.tallrye.wlearn.persistence.model.LearningStep;
-import com.tallrye.wlearn.persistence.model.Question;
-import com.tallrye.wlearn.persistence.model.Topic;
-import com.tallrye.wlearn.persistence.model.User;
-import com.tallrye.wlearn.persistence.model.WikiData;
+import com.tallrye.wlearn.dto.*;
+import com.tallrye.wlearn.entity.*;
 import com.tallrye.wlearn.security.UserPrincipal;
 
 import java.util.ArrayList;
@@ -27,211 +11,197 @@ import java.util.Set;
 
 public class TestUtils {
 
-    public static ChoiceRequest createDummyChoiceRequest() {
-        final ChoiceRequest choiceRequest = new ChoiceRequest();
-        choiceRequest.setCorrect(true);
-        choiceRequest.setQuestionId(0L);
-        choiceRequest.setText("someText");
-        return choiceRequest;
+    public static ChoiceRequestDto createDummyChoiceRequest() {
+        final ChoiceRequestDto choiceRequestDto = new ChoiceRequestDto();
+        choiceRequestDto.setCorrect(true);
+        choiceRequestDto.setQuestionId(0L);
+        choiceRequestDto.setText("someText");
+        return choiceRequestDto;
     }
 
-    public static Choice createDummyChoice() {
-        final Choice choice = new Choice();
-        choice.setCorrect(true);
-        choice.setId(0L);
-        choice.setText("someText");
-        return choice;
+    public static ChoiceEntity createDummyChoice() {
+        final ChoiceEntity choiceEntity = new ChoiceEntity();
+        choiceEntity.setCorrect(true);
+        choiceEntity.setId(0L);
+        choiceEntity.setText("someText");
+        return choiceEntity;
     }
 
-    public static List<Choice> createDummyChoiceList() {
-        final List<Choice> choiceList = new ArrayList<>();
-        choiceList.add(createDummyChoice());
-        return choiceList;
+    public static List<ChoiceEntity> createDummyChoiceList() {
+        final List<ChoiceEntity> choiceEntityList = new ArrayList<>();
+        choiceEntityList.add(createDummyChoice());
+        return choiceEntityList;
     }
 
-    public static ContentRequest createDummyContentRequest() {
-        final ContentRequest contentRequest = new ContentRequest();
-        contentRequest.setId(0L);
-        contentRequest.setTitle("someTitle");
-        contentRequest.setTopicId(0L);
-        contentRequest.setText("someText");
-        return contentRequest;
+    public static ContentRequestDto createDummyContentRequest() {
+        final ContentRequestDto contentRequestDto = new ContentRequestDto();
+        contentRequestDto.setId(0L);
+        contentRequestDto.setTitle("someTitle");
+        contentRequestDto.setTopicId(0L);
+        contentRequestDto.setText("someText");
+        return contentRequestDto;
     }
 
-    public static Content createDummyContent() {
-        final Content content = new Content();
-        content.setId(0L);
-        content.setTitle("someTitle");
-        content.setText("someText");
-        content.setTopic(createDummyTopic());
-        return content;
+    public static ContentEntity createDummyContent() {
+        final ContentEntity contentEntity = new ContentEntity();
+        contentEntity.setId(0L);
+        contentEntity.setTitle("someTitle");
+        contentEntity.setText("someText");
+        contentEntity.setTopicEntity(createDummyTopic());
+        return contentEntity;
     }
 
-    public static ContentResponse createDummyContentResponse() {
-        final ContentResponse contentResponse = new ContentResponse();
-        contentResponse.setId(0L);
-        contentResponse.setTitle("someTitle");
-        contentResponse.setText("someText");
-        contentResponse.setTopicId(0L);
-        return contentResponse;
+    public static ContentResponseDto createDummyContentResponse() {
+        final ContentResponseDto contentResponseDto = new ContentResponseDto();
+        contentResponseDto.setId(0L);
+        contentResponseDto.setTitle("someTitle");
+        contentResponseDto.setText("someText");
+        contentResponseDto.setTopicId(0L);
+        return contentResponseDto;
     }
 
-    public static Topic createDummyTopic() {
-        final Topic topic = new Topic();
-        topic.setId(0L);
-        topic.setDescription("someDescription");
-        topic.setTitle("someTitle");
-        topic.setImageUrl("someImgUrl");
-        topic.setWikiDataSet(createDummyWikiDataSet());
-        topic.setEnrolledUsers(createDummyUserSet());
-        return topic;
+    public static TopicEntity createDummyTopic() {
+        final TopicEntity topicEntity = new TopicEntity();
+        topicEntity.setId(0L);
+        topicEntity.setDescription("someDescription");
+        topicEntity.setTitle("someTitle");
+        topicEntity.setImageUrl("someImgUrl");
+        topicEntity.setWikiDataEntitySet(createDummyWikiDataSet());
+        topicEntity.setEnrolledUserEntities(createDummyUserSet());
+        return topicEntity;
     }
 
-    public static List<Topic> createDummyTopicList() {
-        final List<Topic> topicList = new ArrayList<>();
-        topicList.add(createDummyTopic());
-        return topicList;
+    public static List<TopicEntity> createDummyTopicList() {
+        final List<TopicEntity> topicEntityList = new ArrayList<>();
+        topicEntityList.add(createDummyTopic());
+        return topicEntityList;
     }
 
-    public static Question createDummyQuestion() {
-        final Question question = new Question();
-        question.setId(0L);
-        question.setText("someText");
-        question.setContent(createDummyContent());
-        return question;
+    public static QuestionEntity createDummyQuestion() {
+        final QuestionEntity questionEntity = new QuestionEntity();
+        questionEntity.setId(0L);
+        questionEntity.setText("someText");
+        questionEntity.setContentEntity(createDummyContent());
+        return questionEntity;
     }
 
-    public static List<Question> createDummyQuetionList() {
-        final List<Question> questionList = new ArrayList<>();
-        questionList.add(createDummyQuestion());
-        return questionList;
+    public static List<QuestionEntity> createDummyQuetionList() {
+        final List<QuestionEntity> questionEntityList = new ArrayList<>();
+        questionEntityList.add(createDummyQuestion());
+        return questionEntityList;
     }
 
-    public static QuestionRequest createDummyQuestionRequest() {
-        final QuestionRequest questionRequest = new QuestionRequest();
-        questionRequest.setContentId(0L);
-        questionRequest.setText("someText");
-        return questionRequest;
+    public static QuestionRequestDto createDummyQuestionRequest() {
+        final QuestionRequestDto questionRequestDto = new QuestionRequestDto();
+        questionRequestDto.setContentId(0L);
+        questionRequestDto.setText("someText");
+        return questionRequestDto;
     }
 
-    public static TopicRequest createDummyTopicRequest() {
-        final TopicRequest topicRequest = new TopicRequest();
-        topicRequest.setEnrolledUsers(createDummyUserSet());
-        topicRequest.setWikiData(createDummyWikiDataSet());
-        topicRequest.setContentList(createDummyContentList());
-        topicRequest.setId(0L);
-        topicRequest.setDescription("someDescription");
-        topicRequest.setImageUrl("someImageUrl");
-        topicRequest.setTitle("someTitle");
-        return topicRequest;
+    public static TopicRequestDto createDummyTopicRequest() {
+        final TopicRequestDto topicRequestDto = new TopicRequestDto();
+        topicRequestDto.setEnrolledUserEntities(createDummyUserSet());
+        topicRequestDto.setWikiDatumEntities(createDummyWikiDataSet());
+        topicRequestDto.setContentEntityList(createDummyContentList());
+        topicRequestDto.setId(0L);
+        topicRequestDto.setDescription("someDescription");
+        topicRequestDto.setImageUrl("someImageUrl");
+        topicRequestDto.setTitle("someTitle");
+        return topicRequestDto;
     }
 
-    public static TopicResponse createDummyTopicResponse() {
-        final TopicResponse topicResponse = new TopicResponse();
-        topicResponse.setWikiData(createDummyWikiDataSet());
-        topicResponse.setContentList(createDummyContentList());
-        topicResponse.setId(0L);
-        topicResponse.setDescription("someDescription");
-        topicResponse.setImageUrl("someImageUrl");
-        topicResponse.setTitle("someTitle");
-        return topicResponse;
+    public static TopicResponseDto createDummyTopicResponse() {
+        final TopicResponseDto topicResponseDto = new TopicResponseDto();
+        topicResponseDto.setWikiDatumEntities(createDummyWikiDataSet());
+        topicResponseDto.setContentEntityList(createDummyContentList());
+        topicResponseDto.setId(0L);
+        topicResponseDto.setDescription("someDescription");
+        topicResponseDto.setImageUrl("someImageUrl");
+        topicResponseDto.setTitle("someTitle");
+        return topicResponseDto;
     }
 
-    public static WikiData createDummyWikiData() {
-        final WikiData wikiData = new WikiData();
-        wikiData.setId("id");
-        wikiData.setDescription("someDescription");
-        wikiData.setConceptUri("someConceptUri");
-        wikiData.setLabel("someLabel");
-        return wikiData;
+    public static WikiDataEntity createDummyWikiData() {
+        final WikiDataEntity wikiDataEntity = new WikiDataEntity();
+        wikiDataEntity.setId("id");
+        wikiDataEntity.setDescription("someDescription");
+        wikiDataEntity.setConceptUri("someConceptUri");
+        wikiDataEntity.setLabel("someLabel");
+        return wikiDataEntity;
     }
 
-    public static Set<WikiData> createDummyWikiDataSet() {
-        final Set<WikiData> wikiDataSet = new HashSet<>();
-        wikiDataSet.add(createDummyWikiData());
-        return wikiDataSet;
+    public static Set<WikiDataEntity> createDummyWikiDataSet() {
+        final Set<WikiDataEntity> wikiDataEntitySet = new HashSet<>();
+        wikiDataEntitySet.add(createDummyWikiData());
+        return wikiDataEntitySet;
     }
 
-    public static List<Content> createDummyContentList() {
-        final List<Content> contentList = new ArrayList<>();
-        contentList.add(createDummyContent());
-        return contentList;
+    public static List<ContentEntity> createDummyContentList() {
+        final List<ContentEntity> contentEntityList = new ArrayList<>();
+        contentEntityList.add(createDummyContent());
+        return contentEntityList;
     }
 
-    public static User createDummyUser() {
-        final User user = new User();
-        user.setEmail("email");
-        user.setId(0L);
-        user.setName("name");
-        user.setPassword("pass");
-        user.setUsername("userName");
-        return user;
+    public static UserEntity createDummyUser() {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("email");
+        userEntity.setId(0L);
+        userEntity.setName("name");
+        userEntity.setPassword("pass");
+        userEntity.setUsername("userName");
+        return userEntity;
     }
 
-    public static Set<User> createDummyUserSet() {
-        final Set<User> userSet = new HashSet<>();
-        userSet.add(createDummyUser());
-        return userSet;
+    public static Set<UserEntity> createDummyUserSet() {
+        final Set<UserEntity> userEntitySet = new HashSet<>();
+        userEntitySet.add(createDummyUser());
+        return userEntitySet;
     }
 
     public static UserPrincipal createDummyCurrentUser() {
         return UserPrincipal
-                .create(User.builder().name("name").username("username").email("email").id(0L).password("pass")
-                        .enrolledTopics(new HashSet<>()).build());
+                .create(UserEntity.builder().name("name").username("username").email("email").id(0L).password("pass")
+                        .enrolledTopicEntities(new HashSet<>()).build());
     }
 
-    public static EnrollmentRequest createDummyEnrollmentRequest() {
-        final EnrollmentRequest enrollmentRequest = new EnrollmentRequest();
-        enrollmentRequest.setTopicId(0L);
-        enrollmentRequest.setUsername("username");
-        return enrollmentRequest;
+    public static EnrollmentRequestDto createDummyEnrollmentRequest() {
+        final EnrollmentRequestDto enrollmentRequestDto = new EnrollmentRequestDto();
+        enrollmentRequestDto.setTopicId(0L);
+        enrollmentRequestDto.setUsername("username");
+        return enrollmentRequestDto;
     }
 
-    public static SignUpRequest createDummySignUpRequest() {
-        final SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setEmail("email");
-        signUpRequest.setName("name");
-        signUpRequest.setPassword("pass");
-        signUpRequest.setUsername("username");
-        return signUpRequest;
 
+
+
+    public static PublishRequestDto createDummyPublishRequest() {
+        final PublishRequestDto publishRequestDto = new PublishRequestDto();
+        publishRequestDto.setPublish(true);
+        publishRequestDto.setTopicId(0L);
+        return publishRequestDto;
     }
 
-    public static LoginRequest createDummyLoginRequest() {
-        final LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setPassword("pass");
-        loginRequest.setUsernameOrEmail("usernameOrEmail");
-        return loginRequest;
+    public static LearningPathEntity createDummyLearningStep() {
+        final LearningPathEntity learningPathEntity = new LearningPathEntity();
+        learningPathEntity.setAnswerId(0L);
+        learningPathEntity.setContentId(0L);
+        learningPathEntity.setQuestionId(0L);
+        learningPathEntity.setUserId(0L);
+        learningPathEntity.setCreatedBy(0L);
+        return learningPathEntity;
     }
 
-    public static PublishRequest createDummyPublishRequest() {
-        final PublishRequest publishRequest = new PublishRequest();
-        publishRequest.setPublish(true);
-        publishRequest.setTopicId(0L);
-        return publishRequest;
+    public static List<LearningPathEntity> createDummyLearningStepList() {
+        final List<LearningPathEntity> learningPathEntities = new ArrayList<>();
+        learningPathEntities.add(createDummyLearningStep());
+        return learningPathEntities;
     }
 
-    public static LearningStep createDummyLearningStep() {
-        final LearningStep learningStep = new LearningStep();
-        learningStep.setAnswerId(0L);
-        learningStep.setContentId(0L);
-        learningStep.setQuestionId(0L);
-        learningStep.setUserId(0L);
-        learningStep.setCreatedBy(0L);
-        return learningStep;
-    }
-
-    public static List<LearningStep> createDummyLearningStepList() {
-        final List<LearningStep> learningSteps = new ArrayList<>();
-        learningSteps.add(createDummyLearningStep());
-        return learningSteps;
-    }
-
-    public static AnswerRequest createDummyAnswerRequest() {
-        final AnswerRequest answerRequest = new AnswerRequest();
-        answerRequest.setChoiceId(0L);
-        answerRequest.setQuestionId(0L);
-        return answerRequest;
+    public static AnswerRequestDto createDummyAnswerRequest() {
+        final AnswerRequestDto answerRequestDto = new AnswerRequestDto();
+        answerRequestDto.setChoiceId(0L);
+        answerRequestDto.setQuestionId(0L);
+        return answerRequestDto;
     }
 
 }

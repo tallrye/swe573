@@ -1,8 +1,8 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.response.UserIdentityAvailability;
-import com.tallrye.wlearn.controller.dto.response.UserProfile;
-import com.tallrye.wlearn.controller.dto.response.UserSummary;
+import com.tallrye.wlearn.dto.UserIdentityAvailabilityDto;
+import com.tallrye.wlearn.dto.UserProfileDto;
+import com.tallrye.wlearn.dto.UserSummaryDto;
 import com.tallrye.wlearn.security.CurrentUser;
 import com.tallrye.wlearn.security.UserPrincipal;
 import com.tallrye.wlearn.service.UserService;
@@ -21,19 +21,19 @@ public class UserController {
 
     @Transactional
     @GetMapping(value = "/user/me")
-    public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+    public UserSummaryDto getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         return userService.getCurrentUser(currentUser);
     }
 
     @Transactional
     @GetMapping(value = "/user/checkUsernameAvailability")
-    public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "email") String email) {
+    public UserIdentityAvailabilityDto checkUsernameAvailability(@RequestParam(value = "email") String email) {
         return userService.checkUsernameAvailability(email);
     }
 
     @Transactional
     @GetMapping(value = "/users/{username}")
-    public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
+    public UserProfileDto getUserProfile(@PathVariable(value = "username") String username) {
 
         return userService.getUserProfile(username);
     }

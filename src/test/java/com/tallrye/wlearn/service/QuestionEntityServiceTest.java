@@ -1,21 +1,17 @@
 package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.TestUtils;
-import com.tallrye.wlearn.controller.dto.request.AnswerRequest;
-import com.tallrye.wlearn.controller.dto.request.QuestionRequest;
-import com.tallrye.wlearn.controller.dto.response.ApiResponse;
-import com.tallrye.wlearn.controller.dto.response.LearningStepsResponse;
+import com.tallrye.wlearn.dto.AnswerRequestDto;
+import com.tallrye.wlearn.dto.QuestionRequestDto;
+import com.tallrye.wlearn.dto.ApiResponseDto;
+import com.tallrye.wlearn.dto.LearningStepsResponseDto;
+import com.tallrye.wlearn.entity.*;
 import com.tallrye.wlearn.exception.CreatedByException;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.ContentRepository;
-import com.tallrye.wlearn.persistence.LearningPathRepository;
-import com.tallrye.wlearn.persistence.QuestionRepository;
-import com.tallrye.wlearn.entity.ChoiceEntity;
-import com.tallrye.wlearn.entity.Content;
-import com.tallrye.wlearn.entity.LearningStep;
-import com.tallrye.wlearn.entity.Question;
-import com.tallrye.wlearn.entity.Topic;
-import com.tallrye.wlearn.service.implementation.QuestionServiceImpl;
+import com.tallrye.wlearn.repository.ContentRepository;
+import com.tallrye.wlearn.repository.LearningPathRepository;
+import com.tallrye.wlearn.repository.QuestionRepository;
+import com.tallrye.wlearn.entity.ContentEntity;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-public class QuestionServiceTest extends AbstractServiceTest {
+public class QuestionEntityServiceTest extends AbstractServiceTest {
 
     @Mock
     private QuestionRepository questionRepository;
@@ -47,41 +43,41 @@ public class QuestionServiceTest extends AbstractServiceTest {
 
 
     @InjectMocks
-    private final QuestionService sut = new QuestionServiceImpl(questionRepository, contentRepository,
+    private final QuestionService sut = new QuestionService(questionRepository, contentRepository,
             smepConversionService, learningPathRepository);
 
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testCreateQuestionByContentId_ContentNotFound() {
+    public void createQuestion_ResourceNotFound() {
         //Prepare
-        final QuestionRequest questionRequest = TestUtils.createDummyQuestionRequest();
-        when(contentRepository.findById(questionRequest.getContentId())).thenReturn(Optional.empty());
+        final QuestionRequestDto questionRequestDto = TestUtils.createDummyQuestionRequest();
+        when(contentRepository.findById(questionRequestDto.getContentId())).thenReturn(Optional.empty());
         //Test
-        sut.createQuestionByContentId(currentUser, questionRequest);
+        sut.createQuestionByContentId(currentUser, questionRequestDto);
     }
 
     @Test(expected = CreatedByException.class)
-    public void testCreateQuestionByContentId_CreateByFail() {
+    public void createQuestion_CreateBy() {
         //Prepare
-        final QuestionRequest questionRequest = TestUtils.createDummyQuestionRequest();
-        final Content content = TestUtils.createDummyContent();
-        content.setCreatedBy(1L);
-        when(contentRepository.findById(questionRequest.getContentId())).thenReturn(Optional.of(content));
+        final QuestionRequestDto questionRequestDto = TestUtils.createDummyQuestionRequest();
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        contentEntity.setCreatedBy(1L);
+        when(contentRepository.findById(questionRequestDto.getContentId())).thenReturn(Optional.of(contentEntity));
         //Test
-        sut.createQuestionByContentId(currentUser, questionRequest);
+        sut.createQuestionByContentId(currentUser, questionRequestDto);
     }
 
     @Test
-    public void testCreateQuestionByContentId_Success() {
+    public void createQuestion_Success() {
         //Prepare
-        final QuestionRequest questionRequest = TestUtils.createDummyQuestionRequest();
-        final Content content = TestUtils.createDummyContent();
-        final Question question = TestUtils.createDummyQuestion();
-        content.setCreatedBy(currentUser.getId());
-        when(contentRepository.findById(questionRequest.getContentId())).thenReturn(Optional.of(content));
-        when(smepConversionService.convert(questionRequest, Question.class)).thenReturn(question);
+        final QuestionRequestDto questionRequestDto = TestUtils.createDummyQuestionRequest();
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        final QuestionEntity questionEntity = TestUtils.createDummyQuestion();
+        contentEntity.setCreatedBy(currentUser.getId());
+        when(contentRepository.findById(questionRequestDto.getContentId())).thenReturn(Optional.of(contentEntity));
+        when(smepConversionService.convert(questionRequestDto, QuestionEntity.class)).thenReturn(questionEntity);
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.createQuestionByContentId(currentUser, questionRequest);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.createQuestionByContentId(currentUser, questionRequestDto);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody().getSuccess(), true);
@@ -89,7 +85,7 @@ public class QuestionServiceTest extends AbstractServiceTest {
 
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testDeleteQuestionById_ContentNotFound() {
+public void deleteQuestion__ResourceNotFound() {
         //Prepare
         when(questionRepository.findById(0L)).thenReturn(Optional.empty());
         //Test
@@ -97,23 +93,23 @@ public class QuestionServiceTest extends AbstractServiceTest {
     }
 
     @Test(expected = CreatedByException.class)
-    public void testDeleteQuestionById_CreateByFail() {
+public void deleteQuestion__CreateBy() {
         //Prepare
-        final Question question = TestUtils.createDummyQuestion();
-        question.setCreatedBy(1L);
-        when(questionRepository.findById(0L)).thenReturn(Optional.of(question));
+        final QuestionEntity questionEntity = TestUtils.createDummyQuestion();
+        questionEntity.setCreatedBy(1L);
+        when(questionRepository.findById(0L)).thenReturn(Optional.of(questionEntity));
         //Test
         sut.deleteQuestionById(0L, currentUser);
     }
 
     @Test
-    public void testDeleteQuestionById_Success() {
+public void deleteQuestion__Success() {
         //Prepare
-        final Question question = TestUtils.createDummyQuestion();
-        question.setCreatedBy(currentUser.getId());
-        when(questionRepository.findById(0L)).thenReturn(Optional.of(question));
+        final QuestionEntity questionEntity = TestUtils.createDummyQuestion();
+        questionEntity.setCreatedBy(currentUser.getId());
+        when(questionRepository.findById(0L)).thenReturn(Optional.of(questionEntity));
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.deleteQuestionById(0L, currentUser);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.deleteQuestionById(0L, currentUser);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody().getSuccess(), true);
@@ -121,42 +117,42 @@ public class QuestionServiceTest extends AbstractServiceTest {
 
 
     @Test
-    public void testGetLearningSteps() {
+    public void getLearningPath() {
         //Prepare
-        final List<LearningStep> learningStepList = TestUtils.createDummyLearningStepList();
-        final List<Question> questionList = TestUtils.createDummyQuetionList();
+        final List<LearningPathEntity> learningPathEntityList = TestUtils.createDummyLearningStepList();
+        final List<QuestionEntity> questionEntityList = TestUtils.createDummyQuetionList();
         final List<ChoiceEntity> choiceEntityList = TestUtils.createDummyChoiceList();
-        final Content content = TestUtils.createDummyContent();
-        final List<Content> contentList = new ArrayList<>();
-        final Topic topic = TestUtils.createDummyTopic();
-        contentList.add(content);
-        questionList.get(0).setChoiceEntityList(choiceEntityList);
-        content.setTopic(topic);
-        content.setQuestionList(questionList);
-        topic.setContentList(contentList);
-        when(contentRepository.findById(0L)).thenReturn(Optional.of(content));
-        when(learningPathRepository.findByUserIdAndContentId(currentUser.getId(), content.getId()))
-                .thenReturn(learningStepList);
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        final List<ContentEntity> contentEntityList = new ArrayList<>();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        contentEntityList.add(contentEntity);
+        questionEntityList.get(0).setChoiceEntityList(choiceEntityList);
+        contentEntity.setTopicEntity(topicEntity);
+        contentEntity.setQuestionEntityList(questionEntityList);
+        topicEntity.setContentEntityList(contentEntityList);
+        when(contentRepository.findById(0L)).thenReturn(Optional.of(contentEntity));
+        when(learningPathRepository.findByUserIdAndContentId(currentUser.getId(), contentEntity.getId()))
+                .thenReturn(learningPathEntityList);
         //Test
-        final ResponseEntity<LearningStepsResponse> responseEntity = sut.getLearningSteps(currentUser, 0L);
+        final ResponseEntity<LearningStepsResponseDto> responseEntity = sut.getLearningSteps(currentUser, 0L);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertNotNull(responseEntity.getBody());
     }
 
     @Test
-    public void testGiveAnswer() {
+    public void answer_Success() {
         //Prepare
-        final AnswerRequest answerRequest = TestUtils.createDummyAnswerRequest();
-        final Question question = TestUtils.createDummyQuestion();
-        final LearningStep learningStep = TestUtils.createDummyLearningStep();
-        when(questionRepository.findById(answerRequest.getQuestionId())).thenReturn(Optional.of(question));
+        final AnswerRequestDto answerRequestDto = TestUtils.createDummyAnswerRequest();
+        final QuestionEntity questionEntity = TestUtils.createDummyQuestion();
+        final LearningPathEntity learningPathEntity = TestUtils.createDummyLearningStep();
+        when(questionRepository.findById(answerRequestDto.getQuestionId())).thenReturn(Optional.of(questionEntity));
         when(learningPathRepository
-                .findByUserIdAndContentIdAndQuestionIdAndAnswerId(currentUser.getId(), question.getContent().getId(),
-                        answerRequest.getQuestionId(), answerRequest.getChoiceId()))
-                .thenReturn(Optional.of(learningStep));
+                .findByUserIdAndContentIdAndQuestionIdAndAnswerId(currentUser.getId(), questionEntity.getContentEntity().getId(),
+                        answerRequestDto.getQuestionId(), answerRequestDto.getChoiceId()))
+                .thenReturn(Optional.of(learningPathEntity));
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.giveAnswer(currentUser, answerRequest);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.giveAnswer(currentUser, answerRequestDto);
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody().getSuccess(), true);

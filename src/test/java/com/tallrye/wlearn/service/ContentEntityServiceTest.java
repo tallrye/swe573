@@ -1,16 +1,15 @@
 package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.TestUtils;
-import com.tallrye.wlearn.controller.dto.request.ContentRequest;
-import com.tallrye.wlearn.controller.dto.response.ApiResponse;
-import com.tallrye.wlearn.controller.dto.response.ContentResponse;
+import com.tallrye.wlearn.dto.ContentRequestDto;
+import com.tallrye.wlearn.dto.ApiResponseDto;
+import com.tallrye.wlearn.dto.ContentResponseDto;
+import com.tallrye.wlearn.entity.ContentEntity;
+import com.tallrye.wlearn.entity.TopicEntity;
 import com.tallrye.wlearn.exception.CreatedByException;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.ContentRepository;
-import com.tallrye.wlearn.persistence.TopicRepository;
-import com.tallrye.wlearn.entity.Content;
-import com.tallrye.wlearn.entity.Topic;
-import com.tallrye.wlearn.service.implementation.ContentServiceImpl;
+import com.tallrye.wlearn.repository.ContentRepository;
+import com.tallrye.wlearn.repository.TopicRepository;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,7 +24,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class ContentServiceTest extends AbstractServiceTest {
+public class ContentEntityServiceTest extends AbstractServiceTest {
 
 
     @Mock
@@ -38,13 +37,13 @@ public class ContentServiceTest extends AbstractServiceTest {
     private ConfigurableConversionService smepConversionService;
 
     @InjectMocks
-    private final ContentService sut = new ContentServiceImpl(contentRepository, topicRepository,
+    private final ContentService sut = new ContentService(contentRepository, topicRepository,
             smepConversionService);
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testCreateContentByTopicId_TopicNotFound() {
+    public void createContent_ResourceNotFound() {
         //Prepare
-        final ContentRequest request = TestUtils.createDummyContentRequest();
+        final ContentRequestDto request = TestUtils.createDummyContentRequest();
         when(topicRepository.findById(request.getTopicId())).thenReturn(Optional.empty());
 
         //Test
@@ -52,29 +51,29 @@ public class ContentServiceTest extends AbstractServiceTest {
     }
 
     @Test(expected = CreatedByException.class)
-    public void testCreateContentByTopicId_CreateByFail() {
+    public void createContent_CreateBy() {
         //Prepare
-        final ContentRequest request = TestUtils.createDummyContentRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        topic.setCreatedBy(1L);
-        when(topicRepository.findById(request.getTopicId())).thenReturn(Optional.of(topic));
+        final ContentRequestDto request = TestUtils.createDummyContentRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        topicEntity.setCreatedBy(1L);
+        when(topicRepository.findById(request.getTopicId())).thenReturn(Optional.of(topicEntity));
 
         //Test
         sut.createContentByTopicId(currentUser, request);
     }
 
     @Test
-    public void testCreateChoiceByQuestionId_Success() {
+    public void createChoice_Success() {
         //Prepare
-        final ContentRequest request = TestUtils.createDummyContentRequest();
-        final Topic topic = TestUtils.createDummyTopic();
-        final Content content = TestUtils.createDummyContent();
-        topic.setCreatedBy(currentUser.getId());
-        when(topicRepository.findById(request.getTopicId())).thenReturn(Optional.of(topic));
-        when(smepConversionService.convert(request, Content.class)).thenReturn(content);
+        final ContentRequestDto request = TestUtils.createDummyContentRequest();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        topicEntity.setCreatedBy(currentUser.getId());
+        when(topicRepository.findById(request.getTopicId())).thenReturn(Optional.of(topicEntity));
+        when(smepConversionService.convert(request, ContentEntity.class)).thenReturn(contentEntity);
 
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.createContentByTopicId(currentUser, request);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.createContentByTopicId(currentUser, request);
 
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
@@ -82,7 +81,7 @@ public class ContentServiceTest extends AbstractServiceTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testGetContentById_ContentNotFound() {
+    public void getContent_ResourceNotFound() {
         //Prepare
         when(contentRepository.findById(0L)).thenReturn(Optional.empty());
 
@@ -91,28 +90,28 @@ public class ContentServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testGetContentById_Success() {
+    public void getContent_Success() {
         //Prepare
-        final Content content = TestUtils.createDummyContent();
-        final List<Content> contentList = new ArrayList<>();
-        final Topic topic = TestUtils.createDummyTopic();
-        contentList.add(content);
-        content.setTopic(topic);
-        topic.setContentList(contentList);
-        final ContentResponse contentResponse = TestUtils.createDummyContentResponse();
-        when(contentRepository.findById(0L)).thenReturn(Optional.of(content));
-        when(smepConversionService.convert(content, ContentResponse.class)).thenReturn(contentResponse);
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        final List<ContentEntity> contentEntityList = new ArrayList<>();
+        final TopicEntity topicEntity = TestUtils.createDummyTopic();
+        contentEntityList.add(contentEntity);
+        contentEntity.setTopicEntity(topicEntity);
+        topicEntity.setContentEntityList(contentEntityList);
+        final ContentResponseDto contentResponseDto = TestUtils.createDummyContentResponse();
+        when(contentRepository.findById(0L)).thenReturn(Optional.of(contentEntity));
+        when(smepConversionService.convert(contentEntity, ContentResponseDto.class)).thenReturn(contentResponseDto);
 
         //Test
-        final ResponseEntity<ContentResponse> responseEntity = sut.getContentById(currentUser, 0L);
+        final ResponseEntity<ContentResponseDto> responseEntity = sut.getContentById(currentUser, 0L);
 
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-        assertEquals(responseEntity.getBody(), contentResponse);
+        assertEquals(responseEntity.getBody(), contentResponseDto);
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testDeleteContentById_ContentNotFound() {
+    public void deleteContent_ResourceNotFound() {
         //Prepare
         when(contentRepository.findById(0L)).thenReturn(Optional.empty());
 
@@ -122,25 +121,25 @@ public class ContentServiceTest extends AbstractServiceTest {
 
 
     @Test(expected = CreatedByException.class)
-    public void testDeleteContentById_CreateByFail() {
+    public void deleteContent_CreateBy() {
         //Prepare
-        final Content content = TestUtils.createDummyContent();
-        content.setCreatedBy(1L);
-        when(contentRepository.findById(0L)).thenReturn(Optional.of(content));
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        contentEntity.setCreatedBy(1L);
+        when(contentRepository.findById(0L)).thenReturn(Optional.of(contentEntity));
 
         //Test
         sut.deleteContentById(currentUser, 0L);
     }
 
     @Test
-    public void testDeleteContentById_Success() {
+    public void deleteContent_Success() {
         //Prepare
-        final Content content = TestUtils.createDummyContent();
-        content.setCreatedBy(currentUser.getId());
-        when(contentRepository.findById(0L)).thenReturn(Optional.of(content));
+        final ContentEntity contentEntity = TestUtils.createDummyContent();
+        contentEntity.setCreatedBy(currentUser.getId());
+        when(contentRepository.findById(0L)).thenReturn(Optional.of(contentEntity));
 
         //Test
-        final ResponseEntity<ApiResponse> responseEntity = sut.deleteContentById(currentUser, 0L);
+        final ResponseEntity<ApiResponseDto> responseEntity = sut.deleteContentById(currentUser, 0L);
 
         //Verify
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);

@@ -1,7 +1,7 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.request.AnswerRequest;
-import com.tallrye.wlearn.controller.dto.request.QuestionRequest;
+import com.tallrye.wlearn.dto.AnswerRequestDto;
+import com.tallrye.wlearn.dto.QuestionRequestDto;
 import com.tallrye.wlearn.service.QuestionService;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class QuestionControllerTest extends AbstractEntityControllerTest {
+public class QuestionEntityControllerTest extends AbstractEntityControllerTest {
 
     @Mock
     private QuestionService questionService;
@@ -19,9 +19,9 @@ public class QuestionControllerTest extends AbstractEntityControllerTest {
     private final QuestionController sut = new QuestionController(questionService);
 
     @Test
-    public void testCreateQuestionByContentId() {
+    public void createQuestion() {
         //Prepare
-        final QuestionRequest request = QuestionRequest.builder().contentId(0L).text("someText").build();
+        final QuestionRequestDto request = QuestionRequestDto.builder().contentId(0L).text("someText").build();
         //Test
         sut.createQuestion(currentUser, request);
         //Verify
@@ -29,7 +29,7 @@ public class QuestionControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testDeleteQuestionById() {
+    public void deleteQuestion() {
         //Test
         sut.deleteQuestion(currentUser, 0L);
         //Verify
@@ -37,7 +37,7 @@ public class QuestionControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testGetLearningStepsByContentId() {
+    public void getLearningPath() {
         //Test
         sut.getLearningPath(currentUser, 0L);
         //Verify
@@ -45,9 +45,9 @@ public class QuestionControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testGiveAnswer() {
+    public void answer() {
         //Prepare
-        final AnswerRequest request = AnswerRequest.builder().choiceId(0L).questionId(0L).build();
+        final AnswerRequestDto request = AnswerRequestDto.builder().choiceId(0L).questionId(0L).build();
         //Test
         sut.answer(currentUser, request);
         //Verify

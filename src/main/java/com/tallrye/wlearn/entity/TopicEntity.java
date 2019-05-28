@@ -1,35 +1,31 @@
 package com.tallrye.wlearn.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "topics")
+@JsonIgnoreProperties(
+        value = {"createdBy", "createdAt", "updatedAt"},
+        allowGetters = true
+)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Topic extends UserCreatedDataBaseEntity {
+public class TopicEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,8 +50,8 @@ public class Topic extends UserCreatedDataBaseEntity {
     private String createdByName;
 
     @Nullable
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
-    private List<Content> contentList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "topicEntity")
+    private List<ContentEntity> contentEntityList;
 
     @Nullable
     @ManyToMany(cascade = CascadeType.MERGE)
@@ -63,14 +59,26 @@ public class Topic extends UserCreatedDataBaseEntity {
             name = "topic_wikidata",
             joinColumns = @JoinColumn(name = "topic_id"),
             inverseJoinColumns = @JoinColumn(name = "wikidata_id"))
-    private Set<WikiData> wikiDataSet;
+    private Set<WikiDataEntity> wikiDataEntitySet;
 
     @Nullable
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "enrolled_users",
             joinColumns = @JoinColumn(name = "topic_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> enrolledUsers;
+    private Set<UserEntity> enrolledUserEntities;
+
+    @CreatedBy
+    @Column(updatable = false)
+    private Long createdBy;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Instant updatedAt;
 
 }
 

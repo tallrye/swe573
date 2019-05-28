@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.response;
+package com.tallrye.wlearn.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfile {
+public class UserProfileDto {
 
     private Long id;
     private String username;

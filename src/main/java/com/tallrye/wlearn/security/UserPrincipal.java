@@ -1,6 +1,6 @@
 package com.tallrye.wlearn.security;
 
-import com.tallrye.wlearn.persistence.model.User;
+import com.tallrye.wlearn.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +29,8 @@ public class UserPrincipal implements UserDetails {
     private String password;
 
 
-    public static UserPrincipal create(User user) {
-        return new UserPrincipal(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword());
+    public static UserPrincipal create(UserEntity userEntity) {
+        return new UserPrincipal(userEntity.getId(), userEntity.getName(), userEntity.getUsername(), userEntity.getEmail(), userEntity.getPassword());
     }
 
     @Override

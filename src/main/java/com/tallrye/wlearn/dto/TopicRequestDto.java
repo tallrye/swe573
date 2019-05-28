@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.request;
+package com.tallrye.wlearn.dto;
 
 import com.tallrye.wlearn.entity.ContentEntity;
 import com.tallrye.wlearn.entity.UserEntity;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopicRequest {
+public class TopicRequestDto {
 
 
     private Long id = 0L;

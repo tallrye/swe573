@@ -1,11 +1,11 @@
-package com.tallrye.wlearn.service.implementation;
+package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.dto.LoginRequestDto;
 import com.tallrye.wlearn.dto.SignUpRequestDto;
 import com.tallrye.wlearn.dto.ApiResponseDto;
 import com.tallrye.wlearn.dto.JwtAuthenticationResponseDto;
 import com.tallrye.wlearn.entity.UserEntity;
-import com.tallrye.wlearn.persistence.UserRepository;
+import com.tallrye.wlearn.repository.UserRepository;
 import com.tallrye.wlearn.security.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.net.URI;
 
 @Slf4j
 @Service
-public class AuthServiceImpl {
+public class AuthService {
 
     private AuthenticationManager authenticationManager;
 
@@ -32,9 +32,9 @@ public class AuthServiceImpl {
 
     private JwtTokenProvider tokenProvider;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager,
-            UserRepository userRepository, PasswordEncoder passwordEncoder,
-            JwtTokenProvider tokenProvider) {
+    public AuthService(AuthenticationManager authenticationManager,
+                       UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

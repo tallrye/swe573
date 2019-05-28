@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.service.util;
+package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.exception.CreatedByException;
 

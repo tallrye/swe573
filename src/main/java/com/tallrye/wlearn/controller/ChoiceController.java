@@ -1,7 +1,7 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.request.ChoiceRequest;
-import com.tallrye.wlearn.controller.dto.response.ApiResponse;
+import com.tallrye.wlearn.dto.ApiResponseDto;
+import com.tallrye.wlearn.dto.ChoiceRequestDto;
 import com.tallrye.wlearn.security.CurrentUser;
 import com.tallrye.wlearn.security.UserPrincipal;
 import com.tallrye.wlearn.service.ChoiceService;
@@ -25,15 +25,15 @@ public class ChoiceController {
 
     @Transactional
     @PostMapping(value = "/")
-    public ResponseEntity<ApiResponse> createChoiceByQuestionId(@CurrentUser UserPrincipal currentUser,
-                                                                @Valid @RequestBody ChoiceRequest choiceRequest) {
-        return choiceService.createChoiceByQuestionId(currentUser, choiceRequest);
+    public ResponseEntity<ApiResponseDto> createChoice(@CurrentUser UserPrincipal currentUser,
+                                                       @Valid @RequestBody ChoiceRequestDto choiceRequestDto) {
+        return choiceService.createChoiceByQuestionId(currentUser, choiceRequestDto);
     }
 
     @Transactional
     @DeleteMapping(value = "/{choiceId}")
-    public ResponseEntity<ApiResponse> deleteChoiceById(@CurrentUser UserPrincipal currentUser,
-            @PathVariable Long choiceId) {
+    public ResponseEntity<ApiResponseDto> deleteChoice(@CurrentUser UserPrincipal currentUser,
+                                                       @PathVariable Long choiceId) {
         return choiceService.deleteChoiceById(currentUser, choiceId);
     }
 }

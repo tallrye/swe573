@@ -1,9 +1,9 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.request.AnswerRequest;
-import com.tallrye.wlearn.controller.dto.request.QuestionRequest;
-import com.tallrye.wlearn.controller.dto.response.ApiResponse;
-import com.tallrye.wlearn.controller.dto.response.LearningStepsResponse;
+import com.tallrye.wlearn.dto.AnswerRequestDto;
+import com.tallrye.wlearn.dto.ApiResponseDto;
+import com.tallrye.wlearn.dto.LearningStepsResponseDto;
+import com.tallrye.wlearn.dto.QuestionRequestDto;
 import com.tallrye.wlearn.security.CurrentUser;
 import com.tallrye.wlearn.security.UserPrincipal;
 import com.tallrye.wlearn.service.QuestionService;
@@ -27,29 +27,29 @@ public class QuestionController {
 
     @Transactional
     @PostMapping(value = "/")
-    public ResponseEntity<ApiResponse> createQuestionByContentId(@CurrentUser UserPrincipal currentUser,
-                                                                 @Valid @RequestBody QuestionRequest questionRequest) {
-        return questionService.createQuestionByContentId(currentUser, questionRequest);
+    public ResponseEntity<ApiResponseDto> createQuestion(@CurrentUser UserPrincipal currentUser,
+                                                         @Valid @RequestBody QuestionRequestDto questionRequestDto) {
+        return questionService.createQuestionByContentId(currentUser, questionRequestDto);
     }
 
     @Transactional
     @DeleteMapping("/{questionId}")
-    public ResponseEntity<ApiResponse> deleteQuestionById(@CurrentUser UserPrincipal currentUser,
-            @PathVariable Long questionId) {
+    public ResponseEntity<ApiResponseDto> deleteQuestion(@CurrentUser UserPrincipal currentUser,
+                                                         @PathVariable Long questionId) {
         return questionService.deleteQuestionById(questionId, currentUser);
     }
 
     @Transactional
     @GetMapping("/{contentId}")
-    public ResponseEntity<LearningStepsResponse> getLearningStepsByContentId(@CurrentUser UserPrincipal currentUser,
-                                                                             @PathVariable Long contentId) {
+    public ResponseEntity<LearningStepsResponseDto> getLearningPath(@CurrentUser UserPrincipal currentUser,
+                                                                    @PathVariable Long contentId) {
         return questionService.getLearningSteps(currentUser, contentId);
     }
 
     @Transactional
     @PostMapping(value = "/answer/")
-    public ResponseEntity<ApiResponse> giveAnswer(@CurrentUser UserPrincipal currentUser,
-            @Valid @RequestBody AnswerRequest answerRequest) {
-        return questionService.giveAnswer(currentUser, answerRequest);
+    public ResponseEntity<ApiResponseDto> answer(@CurrentUser UserPrincipal currentUser,
+                                                 @Valid @RequestBody AnswerRequestDto answerRequestDto) {
+        return questionService.giveAnswer(currentUser, answerRequestDto);
     }
 }

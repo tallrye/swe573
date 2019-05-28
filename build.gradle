@@ -32,7 +32,7 @@ sonarqube {
 		property "sonar.jacoco.reportPaths", jacocoMergeFiles
 		property "sonar.test.inclusions", "**/*Test*/**"
 		property "sonar.test.exclusions", "**/*Test*/**"
-		property "sonar.exclusions", ["src/main/java/com/tallrye/wlearn/persistence/model/*",
+		property "sonar.exclusions", ["src/main/java/com/tallrye/wlearn/repository/entity/*",
 									  "src/main/java/com/tallrye/wlearn/config/*",
 									  "src/main/java/com/tallrye/wlearn/controller/dto/request/*",
 									  "src/main/java/com/tallrye/wlearn/controller/dto/response/*",

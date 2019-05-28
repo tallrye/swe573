@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.response;
+package com.tallrye.wlearn.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserIdentityAvailability {
+public class UserIdentityAvailabilityDto {
 
     private Boolean available;
 }

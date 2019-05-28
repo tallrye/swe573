@@ -1,27 +1,27 @@
 package com.tallrye.wlearn.converter;
 
-import com.tallrye.wlearn.controller.dto.request.TopicRequest;
-import com.tallrye.wlearn.persistence.model.Topic;
+import com.tallrye.wlearn.dto.TopicRequestDto;
+import com.tallrye.wlearn.entity.TopicEntity;
 import org.springframework.core.convert.converter.Converter;
 
-public class TopicRequestToTopic implements Converter<TopicRequest, Topic> {
+public class TopicRequestToTopic implements Converter<TopicRequestDto, TopicEntity> {
 
     @Override
-    public Topic convert(TopicRequest source) {
+    public TopicEntity convert(TopicRequestDto source) {
 
-        final Topic topic = Topic.builder()
+        final TopicEntity topicEntity = TopicEntity.builder()
                 .title(source.getTitle())
                 .description(source.getDescription())
-                .wikiDataSet(source.getWikiData())
-                .enrolledUsers(source.getEnrolledUsers())
+                .wikiDataEntitySet(source.getWikiDatumEntities())
+                .enrolledUserEntities(source.getEnrolledUserEntities())
                 .imageUrl(source.getImageUrl())
                 .createdByName(source.getCreatedByName())
                 .build();
 
         if (source.getId() != 0L) {
-            topic.setId(source.getId());
+            topicEntity.setId(source.getId());
         }
 
-        return topic;
+        return topicEntity;
     }
 }

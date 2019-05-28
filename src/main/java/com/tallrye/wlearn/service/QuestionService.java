@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.service.implementation;
+package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.dto.AnswerRequestDto;
 import com.tallrye.wlearn.dto.QuestionRequestDto;
@@ -8,13 +8,12 @@ import com.tallrye.wlearn.dto.QuestionResponseDto;
 import com.tallrye.wlearn.entity.LearningPathEntity;
 import com.tallrye.wlearn.entity.QuestionEntity;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.ContentRepository;
-import com.tallrye.wlearn.persistence.LearningPathRepository;
-import com.tallrye.wlearn.persistence.QuestionRepository;
+import com.tallrye.wlearn.repository.ContentRepository;
+import com.tallrye.wlearn.repository.LearningPathRepository;
+import com.tallrye.wlearn.repository.QuestionRepository;
 import com.tallrye.wlearn.entity.ChoiceEntity;
 import com.tallrye.wlearn.entity.ContentEntity;
 import com.tallrye.wlearn.security.UserPrincipal;
-import com.tallrye.wlearn.service.util.WlearnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class QuestionServiceImpl {
+public class QuestionService {
 
     private static final String CONTENT = "ContentEntity";
     private static final String QUESTION = "QuestionEntity";
@@ -41,8 +40,8 @@ public class QuestionServiceImpl {
 
     private LearningPathRepository learningPathRepository;
 
-    public QuestionServiceImpl(QuestionRepository questionRepository, ContentRepository contentRepository,
-            ConfigurableConversionService smepConversionService, LearningPathRepository learningPathRepository) {
+    public QuestionService(QuestionRepository questionRepository, ContentRepository contentRepository,
+                           ConfigurableConversionService smepConversionService, LearningPathRepository learningPathRepository) {
         this.questionRepository = questionRepository;
         this.contentRepository = contentRepository;
         this.smepConversionService = smepConversionService;

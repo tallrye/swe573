@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.response;
+package com.tallrye.wlearn.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LearningStepsResponse {
+public class LearningStepsResponseDto {
 
-    private List<QuestionResponse> questions;
+    private List<QuestionResponseDto> questions;
 
     private String contentTitle;
 

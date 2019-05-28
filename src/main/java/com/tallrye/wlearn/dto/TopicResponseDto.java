@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.response;
+package com.tallrye.wlearn.dto;
 
 import com.tallrye.wlearn.entity.ContentEntity;
 import com.tallrye.wlearn.entity.WikiDataEntity;
@@ -17,7 +17,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopicResponse {
+public class TopicResponseDto {
 
     private Long id;
     private String title;

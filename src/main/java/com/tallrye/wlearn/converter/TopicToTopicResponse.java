@@ -1,23 +1,23 @@
 package com.tallrye.wlearn.converter;
 
-import com.tallrye.wlearn.controller.dto.response.TopicResponse;
-import com.tallrye.wlearn.persistence.model.Topic;
+import com.tallrye.wlearn.dto.TopicResponseDto;
+import com.tallrye.wlearn.entity.TopicEntity;
 import org.springframework.core.convert.converter.Converter;
 
-public class TopicToTopicResponse implements Converter<Topic, TopicResponse> {
+public class TopicToTopicResponse implements Converter<TopicEntity, TopicResponseDto> {
 
     @Override
-    public TopicResponse convert(Topic source) {
-        return TopicResponse.builder()
+    public TopicResponseDto convert(TopicEntity source) {
+        return TopicResponseDto.builder()
                 .id(source.getId())
                 .title(source.getTitle())
                 .description(source.getDescription())
                 .imageUrl(source.getImageUrl())
-                .contentList(source.getContentList())
+                .contentEntityList(source.getContentEntityList())
                 .createdBy(source.getCreatedBy())
                 .createdByName(source.getCreatedByName())
                 .creationDateTime(source.getCreatedAt())
-                .wikiData(source.getWikiDataSet())
+                .wikiDatumEntities(source.getWikiDataEntitySet())
                 .published(source.isPublished())
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.tallrye.wlearn.controller.dto.response;
+package com.tallrye.wlearn.dto;
 
 import com.tallrye.wlearn.entity.ChoiceEntity;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionResponse {
+public class QuestionResponseDto {
 
     private Long id;
 

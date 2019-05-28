@@ -1,14 +1,14 @@
 package com.tallrye.wlearn.converter;
 
-import com.tallrye.wlearn.controller.dto.request.ChoiceRequest;
-import com.tallrye.wlearn.persistence.model.Choice;
+import com.tallrye.wlearn.dto.ChoiceRequestDto;
+import com.tallrye.wlearn.entity.ChoiceEntity;
 import org.springframework.core.convert.converter.Converter;
 
-public class ChoiceRequestToChoice implements Converter<ChoiceRequest, Choice> {
+public class ChoiceRequestToChoice implements Converter<ChoiceRequestDto, ChoiceEntity> {
 
     @Override
-    public Choice convert(ChoiceRequest source) {
-        return Choice.builder()
+    public ChoiceEntity convert(ChoiceRequestDto source) {
+        return ChoiceEntity.builder()
                 .text(source.getText())
                 .correct(source.getCorrect())
                 .build();

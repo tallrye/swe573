@@ -1,7 +1,7 @@
 package com.tallrye.wlearn.security;
 
-import com.tallrye.wlearn.persistence.UserRepository;
-import com.tallrye.wlearn.persistence.model.User;
+import com.tallrye.wlearn.entity.UserEntity;
+import com.tallrye.wlearn.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,20 +21,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String usernameOrEmail) {
-        final User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        final UserEntity userEntity = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 "UserEntity not found with username or email : " + usernameOrEmail));
 
-        return UserPrincipal.create(user);
+        return UserPrincipal.create(userEntity);
     }
 
     @Transactional
     public UserDetails loadUserById(Long id) {
-        final User user = userRepository.findById(id).orElseThrow(
+        final UserEntity userEntity = userRepository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException("UserEntity not found with id : " + id));
 
-        return UserPrincipal.create(user);
+        return UserPrincipal.create(userEntity);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.tallrye.wlearn.controller;
 
-import com.tallrye.wlearn.controller.dto.request.ContentRequest;
+import com.tallrye.wlearn.dto.ContentRequestDto;
 import com.tallrye.wlearn.service.ContentService;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -10,7 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 
-public class ContentControllerTest extends AbstractEntityControllerTest {
+public class ContentEntityControllerTest extends AbstractEntityControllerTest {
 
     @Mock
     private ContentService contentService;
@@ -19,9 +19,9 @@ public class ContentControllerTest extends AbstractEntityControllerTest {
     private final ContentController sut = new ContentController(contentService);
 
     @Test
-    public void testCreateContentByTopicId() {
+    public void createContent() {
         //Prepare
-        final ContentRequest request = ContentRequest.builder().id(0L).text("someText").title("title").topicId(0L)
+        final ContentRequestDto request = ContentRequestDto.builder().id(0L).text("someText").title("title").topicId(0L)
                 .build();
         //Test
         sut.createContent(currentUser, request);
@@ -30,7 +30,7 @@ public class ContentControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testGetContentById() {
+    public void getContent() {
         //Test
         sut.getContent(currentUser, 0L);
         //Verify
@@ -38,7 +38,7 @@ public class ContentControllerTest extends AbstractEntityControllerTest {
     }
 
     @Test
-    public void testDeleteContentById() {
+    public void deleteContent() {
         //Test
         sut.deleteContent(currentUser, 0L);
         //Verify

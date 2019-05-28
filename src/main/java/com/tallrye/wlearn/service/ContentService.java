@@ -1,15 +1,14 @@
-package com.tallrye.wlearn.service.implementation;
+package com.tallrye.wlearn.service;
 
 import com.tallrye.wlearn.dto.ContentRequestDto;
 import com.tallrye.wlearn.dto.ApiResponseDto;
 import com.tallrye.wlearn.dto.ContentResponseDto;
 import com.tallrye.wlearn.entity.ContentEntity;
 import com.tallrye.wlearn.exception.ResourceNotFoundException;
-import com.tallrye.wlearn.persistence.ContentRepository;
-import com.tallrye.wlearn.persistence.TopicRepository;
+import com.tallrye.wlearn.repository.ContentRepository;
+import com.tallrye.wlearn.repository.TopicRepository;
 import com.tallrye.wlearn.entity.TopicEntity;
 import com.tallrye.wlearn.security.UserPrincipal;
-import com.tallrye.wlearn.service.util.WlearnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class ContentServiceImpl {
+public class ContentService {
 
     private static final String TOPIC = "TopicEntity";
     private static final String CONTENT = "ContentEntity";
@@ -33,8 +32,8 @@ public class ContentServiceImpl {
 
     private ConfigurableConversionService smepConversionService;
 
-    public ContentServiceImpl(ContentRepository contentRepository, TopicRepository topicRepository,
-            ConfigurableConversionService smepConversionService) {
+    public ContentService(ContentRepository contentRepository, TopicRepository topicRepository,
+                          ConfigurableConversionService smepConversionService) {
         this.contentRepository = contentRepository;
         this.topicRepository = topicRepository;
         this.smepConversionService = smepConversionService;
